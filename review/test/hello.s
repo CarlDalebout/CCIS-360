@@ -17,6 +17,7 @@ main:
     la $a0, hello # a0 = hello
     li $v0, 4 # syscall 4: print string
     syscall
+    
     li $v0, 10 # syscall 10: exit
     syscall
 
