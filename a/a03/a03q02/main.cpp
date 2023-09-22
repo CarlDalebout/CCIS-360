@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cmath>
 
 const int MAX_BUF = 1024;
 
@@ -30,6 +31,17 @@ void tokeniz(std::string input)
         tokens.push_back(tok);
 }
 
+int getsum(std::string input)
+{
+    int sum = 0; 
+    for(int i = 0; i < input.size(); ++i)
+    {
+        std::cout << "Sum = " << sum << " + " << (input[i]-48) * pow(10, input.size() - i - 1) << std::endl;
+        sum += (input[i]-48) * pow(10, input.size() - i - 1);
+    }
+    return sum;
+}
+
 int main()
 {
     int s[] = {0, 0, 0};
@@ -46,41 +58,28 @@ int main()
         
         // perform computation here
         tokeniz(input);
-        std::cout << "number of tokens " << tokens.size() << std::endl;
+        // std::cout << "number of tokens " << tokens.size() << std::endl;
 
-        for(std::string i : tokens)
+        // for(std::string i : tokens)
+        // {
+        //     std::cout << "\t|" << i << '|' << std::endl;
+        // }
+
+        if(tokens[0] =="li")
         {
-            std::cout << '\t' << i << std::endl;
+            s[int(tokens[1][2])-48] = getsum(tokens[2]);
         }
-
-        int switch_case = 0
-        if()
-
-        switch ()
+        else if(tokens[0] == "add")
         {
-            case "li":
-            {
-                int sum = 0;
-                for(unsigned int i = 0; i < tokens[2].size(); ++i)
-                {
-                    sum += int(tokens[2][i])-48;
-                }
-                s[int(tokens[1][2])-48] = sum;
-                break;
-            }
-
-            case "add":
-            {
-
-                break;
-            }
-
-            case "sub":
-            {
-
-                break;
-            }
+            s[int(tokens[1][2])-48] = s[int(tokens[2][2])-48];
+            s[int(tokens[1][2])-48] += s[int(tokens[3][2])-48];
         }
+        else if(tokens[0] == "sub")
+        {
+            s[int(tokens[1][2])-48] = s[int(tokens[2][2])-48];
+            s[int(tokens[1][2])-48] -= s[int(tokens[3][2])-48];
+        }
+    
 
         std::cout << "$s0: " << s[0] << std::endl;
         std::cout << "$s1: " << s[1] << std::endl;
