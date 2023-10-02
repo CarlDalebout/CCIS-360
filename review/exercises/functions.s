@@ -17,6 +17,46 @@ newln:
     syscall
     jr      $ra
 
+int_pow_int_int:    # $a0 = x, $a1 = i
+    li      $v0, 1
+    pow_loop:   
+        beq     $a1, $0, pow_break
+        mul    $v0, $a0, $v0
+        addi   $a1, $a1, -1
+        j       pow_loop
+    pow_break:
+    jr      $ra
+
+swap_pint_int_int:   # $a0 = bass address of x $a1 = i $a2 = j
+    addu        $a1, $a1, $a1
+    addu        $a1, $a1, $a1
+    addu        $a1, $a0, $a1 # a1 = &x[i]
+
+    addu        $a2, $a2, $a2
+    addu        $a2, $a2, $a2
+    addu        $a2, $a0, $a2 # a2 = &x[j]
+
+    lw          $t0, 0($a1) # t0 = x[i]
+    lw          $a0, 0($a2) # a0 = x[j]
+    sw          $t0, 0($a2) 
+    sw          $a0, 0($a1)
+    jr          $ra
+
+# a0 = base of array
+# a1 = end of array
+bubblesort: # not done
+    sub     $t0, $a0, $a1      
+    bubblesort_for1:
+        beq $t0, $0, bubblesort_exit
+
+        bubblesort_for2:
+
+
+    bubblesort_exit:
+
+
+# a0 = x
+# a1 = y
 max_int:
 
     blt     $a0 $a1, max_int_1   # if(a0 >= a1)
@@ -27,7 +67,7 @@ max_int:
     move    $v0, $a1
     jr      $ra
 
-max_int_arr:
+max_int_arr: # not done
     max_int_arr_Loop:
         beq     $a0, $a1, exit
         lw      $t0, 0($s0)
