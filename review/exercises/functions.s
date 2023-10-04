@@ -54,7 +54,6 @@ bubblesort: # not done
 
     bubblesort_exit:
 
-
 # a0 = x
 # a1 = y
 max_int:
@@ -77,6 +76,7 @@ max_int_arr: # not done
         addiu   $a0, $a0, 4
         j       max_int_arr_Loop
     move    $v0, $t0
+
 
 
 main:
