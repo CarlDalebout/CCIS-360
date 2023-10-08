@@ -11,7 +11,7 @@ print_int:
     syscall
     jr      $ra
 
-newln:
+print_newln:
     li      $v0, 4 # Print newline
     la      $a0, NEWLINE
     syscall
@@ -21,8 +21,8 @@ int_pow_int_int:    # $a0 = x, $a1 = i
     li      $v0, 1
     pow_loop:   
         beq     $a1, $0, pow_break
-        mul    $v0, $a0, $v0
-        addi   $a1, $a1, -1
+        mul     $v0, $a0, $v0
+        addi    $a1, $a1, -1
         j       pow_loop
     pow_break:
     jr      $ra
