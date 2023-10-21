@@ -14,9 +14,7 @@ main:
     syscall
     move    $s2, $v0      # b = s2
 
-    li      $t0, 0
-
-    blt     $s0, $t0 exit2
+    blt     $s0, $0 exit2
     li      $t0, 4
     bgt     $s0, $t0 exit2
 

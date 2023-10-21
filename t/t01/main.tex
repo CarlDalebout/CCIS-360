@@ -10,7 +10,7 @@
 \begin{center}
   \textsc{Honor Statement}
 \end{center}
-I, \answerbox{[REPLACE WITH YOUR FULLNAME]},
+I, \answerbox{[Carl Alexander Dalebout]},
 attest to the fact that the submitted work is my own and
 is not the result of plagiarism.
 Furthermore, I have not aided another student in the act of
@@ -60,7 +60,7 @@ from scoretable import *
   \\
   \ANSWER\vspace{4mm}
   \begin{answercode}
-
+    t
   \end{answercode}
   
 \item[(d)]
@@ -68,6 +68,9 @@ from scoretable import *
   \\
   \ANSWER\vspace{4mm}
   \begin{answercode}
+    input
+    output
+    Memory
 
   \end{answercode}
 
@@ -77,7 +80,8 @@ from scoretable import *
   \\
   \ANSWER\vspace{4mm}
   \begin{answercode}
-
+    Cache
+    Chip
   \end{answercode}
   
 \item[(f)]
@@ -91,7 +95,7 @@ from scoretable import *
   \end{itemize}
   \ANSWER\vspace{4mm}
   \begin{answercode}
-
+    a
   \end{answercode}
 \end{itemize}
 
@@ -114,9 +118,12 @@ You must not change the data segment.
 	  .text
 	  .globl    main
           
-main:     la        $a0, odyssey
-	  li        $v0, 1
+main:     
+    la        $a0, odyssey
+	  lw        $a0, 0($a0)
+    li        $v0, 1
 	  syscall
+
 	  li        $v0, 10
 	  syscall
 
@@ -153,7 +160,16 @@ Write down the number of \verb!t!-registers used.
 \\
 \ANSWER
 \begin{answercode}
-
+# 9 * a - (b + c) + d
+move  $t0, $s0       
+add   $t0, $t0, $t0 
+add   $t0, $t0, $t0 
+add   $t0, $t0, $t0 # t0 = 8 * a
+add   $t0, $t0, $s0 # t0 = 9 * a   
+move  $t1, $s1      # t1 = b
+add   $t1, $t1, $s2 # t1 = b + c
+sub   $t0, $t0, $t1 # t0 = 9 * a - (b + c)
+add   $s4, $t0, $s3 # s4 = 9 * a - (b + c) + d
 \end{answercode}
 \vspace{-4mm}
 (Code fragment, not a complete program.)
@@ -162,7 +178,7 @@ Number of \verb!t!--registers used:
 \\
 \ANSWER
 \begin{answercode}
-
+2
 \end{answercode}
 
 
@@ -183,6 +199,8 @@ the code or
 \lq\lq\verb!insert here: xxxxx!" to insert some code between two lines.
 
 \begin{answercode}
+
+  ///// will come back to this
                                    COMMENTS TO SUEa
         addi    $t0, $s0, 20       should be: ????
 
@@ -214,7 +232,14 @@ Otherwise, the value in \verb!$s0! is unchanged.
 
 \textsc{Answer:}
 \begin{answercode}
-
+li  $t0, 5
+ble $s0, $t0 clamp_upper # if(s0 <= t0) {/*do nothing*/}
+  li  $s0, 5
+clamp_upper:
+li  $t0, -5
+bge $s0, $t0 clamp_lower # if(s0 >= -5) {/*do nothing*/}
+  li  $s0, 5
+clamp_lower:
 \end{answercode}
 \vspace{-4mm}
 (Code fragment, not a complete program.)
@@ -233,6 +258,23 @@ is associated with \verb!$t1!.
 
 \textsc{Answer:}
 \begin{answercode}
+# t0 = f[]
+# t1 = i
+addu  $t2, $t1, $t1
+addu  $t2, $t2, $t2
+addu  $t2, $t2, $t0
+lw    $t2, 0($t2)
+addiu $t3, $t1, 1
+addu  $t3, $t3, $t3
+addu  $t3, $t3, $t3
+addu  $t3, $t3, $t0
+lw    $t3, 0($t3)
+add   $t2, $t2, $t3 # t2 = f[i+1]+f[i]
+addiu $t3, $t1, 2
+addu  $t3, $t3, $t3 
+addu  $t3, $t3, $t3 
+addu  $t3, $t3, $t0 # t3 = f[i + 2]
+sw    $t2, 0($t3)0
 
 \end{answercode}
 
@@ -253,7 +295,24 @@ rather, use a pointer to iterate over the array.
 
 \textsc{Answer:}
 \begin{answercode}
-
+# a0 = x[]
+# a1 = n
+addu  $t0, $a1, $a1
+addu  $t0, $t0, $t0 
+addu  $t0, $t0, $a0 #  t0 = x[n]
+bubblesort_loop:
+blt   $a0, $t0, bubblesort_loop_end
+  lw  $t1, 0($a0)
+  lw  $t2, 4($a0)
+  blt $t1, $t2, bubblesort_swap # if(t1 > t2) {}
+    j bubblesort_loop_continue
+  bubblesort_swap:
+    sw  $t2, 0($a0)
+    sw  $t1, 4($a0)
+  bubblesort_loop_continue:
+addiu $a0, $a0, 4
+j   bubblesort_loop
+bubblesort_loop_end:
 \end{answercode}
 \vspace{-4mm}
 (Code fragment, not a complete program.)
@@ -272,11 +331,11 @@ at the end of the code fragment (i.e., not complete program)?
         .text
         .globl main        
         [code omitted]
-        la     $s0, L
-        lw     $s1, 8($s0)
-        lw     $s2, 16($s0)
-        la     $s0, L1
-        lw     $s3, -4($s0)
+        la     $s0, L       # s0 = L
+        lw     $s1, 8($s0)  # s1 = 44
+        lw     $s2, 16($s0) # s2 = 46
+        la     $s0, L1      # s0 = L1
+        lw     $s3, -4($s0) # s3 = 49
         [code omitted]
         
         .data
@@ -287,9 +346,9 @@ L1:     .word 50 51 52 53
 \end{Verbatim}
 \textsc{Answer:}
 \\
-\verb!$s1! \answerbox{?} \hspace{1cm}
-\verb!$s2! \answerbox{?} \hspace{1cm}
-\verb!$s3! \answerbox{?} \\
+\verb!$s1! \answerbox{44} \hspace{1cm}
+\verb!$s2! \answerbox{46} \hspace{1cm}
+\verb!$s3! \answerbox{49} \\
 
 (b)
 What is the value of \verb!$s2! at the end of the code fragment?
@@ -298,9 +357,9 @@ What is the value of \verb!$s2! at the end of the code fragment?
         .text
         .globl main        
         [code omitted]
-        la     $s0, W
-        lw     $s1, 4($s0)
-        lw     $s2, 8($s1)
+        la     $s0, W       
+        lw     $s1, 4($s0)  # s1 = 2
+        lw     $s2, 8($s1)  # error
         [code omitted]
         
         .data
@@ -310,7 +369,7 @@ Z:      .word 9 10 11 12
 W:      .word X Y Z
 \end{Verbatim}
 \textsc{Answer:} \\
-\verb!$s2! \answerbox{?}
+\verb!$s2! \answerbox{ERROR}
 
 %------------------------------------------------------------------------------
 \newpage
@@ -319,7 +378,7 @@ Write a MIPS code fragment that, starting with $n$ (assume stored in
 \verb!$s0!),
 it
 continually computes $3n + 1$ if $n$ is odd or $n/2$
-if $n$ is odd
+if $n$ is even
 and store it back into $n$ until $n$ is $1$.
 (\verb!/! is integer division.)
 The values of $n$ are stores in an array in the data segment --
@@ -343,7 +402,34 @@ Note that the starting value $n = 3$ is also stored.
 
 \textsc{Answer:}
 \begin{answercode}
+  # s0 = n
+  # t0 = index of L
+  la    $t0, L
+  sw    $s0, 0($t0)
+  addiu $t0, $t0, 4
+  loop:
+  li    $t1, 1
+  beq   $s0, $t1, loop_exit
+  li    $t1, 2
+  div   $s0, $t1
+  hfhi  $t1
+  beq   $t1, $0, comput_even # if(t1 == 0)
+    mult  $s0, 3
+    mflo  $s0
+    addi  $s0, $s0, 1
+    sw    $s0, 0($t0)
+    addiu $t0, $t0, 4
+    j   loop
+  comput_even:
+    div   $s0, $t1
+    mfhi  $s0
+    sw    $s0, 0($t0)
+    addiu $t0, $t0, 4
+  j loop
+  loop_exit:
 
+  .data
+L:    .word
 \end{answercode}
 
 %------------------------------------------------------------------------------
@@ -406,20 +492,32 @@ Implement the switch here
         .text
         .globl main
 main:
-        li $t0, 0           # your code must work for different values of t0
+      li    $t0, 0           # your code must work for different values of t0
+      la    $t1, Jtable
+      addiu $t0, $t0, $t0
+      addiu $t0, $t0, $t0
+      addiu $t0, $t0, $t1
+      jr    $t0 
+      # implement switch below
+      L0:
+        li  $t1, 12
+        j   exit
+      L1:
+        li  $t1, 34
+        j   exit
+      L2:
+        li  $t1, 56
+        j   exit
+      L3:
+        li  $t1, 78
+      # At this point $t1 must be set to the right value based on your
+      # implementation of switch
+exit:
+      li $v0, 10          # exit
+      syscall
 
-        # implement switch below
-
-
-
-
-        # At this point $t1 must be set to the right value based on your
-        # implementation of switch
-        li $v0, 10          # exit
-        syscall
-
-        .data
-
+      .data
+Jtable: L0, L1, L2, L3
 \end{answercode}
 
 %------------------------------------------------------------------------------
@@ -442,7 +540,14 @@ claims that it can be done with two multiplications.
 
 \textsc{Answer:}
 \begin{answercode}
-  
+# s0 = y2
+# s1 = X
+addi  $t0, $s1, 2
+mult  $t0, $s1
+mflow $t0
+addi  $t0, $t0, 3
+mult  $t0, $s1
+addi  $s0, $t0, 4
 \end{answercode}
 
 % ------------------------------------------------------------------------------
@@ -463,12 +568,51 @@ one pass of bubblesort.)
 
 \textsc{Answer:}
 \begin{answercode}
-swap:
+swap: # a0 = larger a1 = smaller
+  lw  $t0, 0($a0)
+  lw  $t1, 0($a1)
+  sw  $t0, 0($a1)
+  sw  $t1, 0($a0)
+  jr  $ra
 
+bubblesort_iterate:
+  # a0 = x[]
+  # a1 = i
+  bubblesort_iterate_loop:
+  blt   $a0, $a1, bubblesort_iterate_loop_end
+    lw  $t1, 0($a0)
+    lw  $t2, 4($a0)
+    blt $t1, $t2, bubblesort_iterate_swap # if(t1 > t2) {}
+      j bubblesort_iterate_loop_continue
+    bubblesort_iterate_swap:
+      sw  $t2, 0($a0)
+      sw  $t1, 4($a0)
+    bubblesort_iterate_loop_continue:
+  addiu $a0, $a0, 4
+  j   bubblesort_iterate_loop
+  bubblesort_iterate_loop_end:
+  jr    $ra
 
-bubblesort:
-
-
+bubblesort: # a0 = x[], a1 = n
+  addu  $t1, $a1, $a1
+  addu  $t1, $t1, $t1
+  addu  $t1, $t1, $a0 # t0 = x[n]
+  move  $t0, $a0
+  bubblesort_loop:
+  beq   $t1, $t0, bubblesort_loop_exit
+      addiu $sp, $sp, -12
+      sw    $ra, 0($sp)
+      sw    $a0, 4($sp)
+      sw    $a1, 8($sp)
+        move  $a1, $t1
+        jal   bubblesort_iterate
+      lw    $a1, 8($sp)
+      lw    $a0, 4($sp)
+      sw    $ra, 0($sp)
+  addiu $t1, $t1, -4 
+  j     bubblesort_loop
+  bubblesort_loop_exit:
+  jr    $ra
 \end{answercode}
 
 %------------------------------------------------------------------------------

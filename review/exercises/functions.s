@@ -155,6 +155,7 @@ C: # a0 = n, a1 = r
     addiu   $sp, $sp, 16
     jr      $ra
 
+#
 
 # a0 - n, v0 = fibonacci of n (fib(0) = 1, fib(1) = 1, ..., fib(n) = fib(n-1) + fib(n-2))
 fib:
@@ -195,7 +196,12 @@ gcd:
         addiu   $sp, $sp, 4
         jr      $ra
 
-
+find_switch_jump: # a0 = value, a1 = Jtable
+    add     $a0, $a0, $a0
+    add     $a0, $a0, $a0   # t0 = 4 * s0
+    add     $a0, $a1, $a0
+    lw      $v0, 0($a0)
+    jr      $ra
 
 main:
     la      $a0, x
