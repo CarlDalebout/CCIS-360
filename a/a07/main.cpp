@@ -14,6 +14,20 @@ void hanoi(int n, char from, char helper, char to)
     }
 }
 
+void print_int_array(int *start, int *end )
+{
+    if(start == end)
+    {
+        std::cout << "\n";
+        return;
+    }
+    else
+    {
+        std::cout << *start << " ";
+        print_int_array(start+1, end);
+    }
+}
+
 int j(int n, int k)
 {
     if (n == 1)
@@ -24,10 +38,7 @@ int j(int n, int k)
 
 int main()
 {
-    int n = 0;
-    int k = 0;
-    std::cin >> n;
-    std::cin >> k;
-    std::cout << j(n, k) << std::endl;
+    int n[] = {200, 3, 4, 11, 15, 20, 100, 101};
+    print_int_array(&n[0], &n[8]);
     return 0;
 }
