@@ -30,11 +30,11 @@ main:
 
         la      $s0, x
         li      $s1, 6
-        lw      $s2, 0($s0)
+        lw      $s2, 0($s0)     # s2 = 7
+        addu    $s1, $s1, $s1   
         addu    $s1, $s1, $s1
-        addu    $s1, $s1, $s1
-        addu    $s1, $s0, $s1
-        addiu   $s0, $s0, 4
+        addu    $s1, $s0, $s1   # s1 = end of the array
+        addiu   $s0, $s0, 4     # s0 = address of 5
 Loop:
         beq     $s0, $s1, exit
         lw      $t0, 0($s0)

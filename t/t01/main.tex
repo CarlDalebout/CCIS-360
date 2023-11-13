@@ -1,0 +1,621 @@
+\input{thispreamble.tex}
+
+\renewcommand\AUTHOR{jdoe5@cougars.ccis.edu} % CHANGE TO YOURS
+
+\begin{document}
+\topmattertwo
+
+\input{preamble-instructions.tex}
+
+\begin{center}
+  \textsc{Honor Statement}
+\end{center}
+I, \answerbox{[Carl Alexander Dalebout]},
+attest to the fact that the submitted work is my own and
+is not the result of plagiarism.
+Furthermore, I have not aided another student in the act of
+plagiarism.
+
+% ------------------------------------------------------------------------------
+\begin{python}
+from scoretable import *
+\end{python}
+
+% ------------------------------------------------------------------------------
+\newpage
+\input{preamble.tex}
+
+% ------------------------------------------------------------------------------
+\newpage
+\nextq
+\begin{itemize}
+
+\item[(a)]
+  ISA stands for
+  
+  \ANSWER\vspace{4mm}
+  \begin{answercode}
+
+  \end{answercode}
+
+\item[(b)]
+  CISC stands for
+ 
+  \ANSWER\vspace{4mm}
+  \begin{answercode}
+
+  \end{answercode}
+
+\item[(c)]
+  RISC stands for
+  \\
+  \ANSWER\vspace{4mm}
+  \begin{answercode}
+
+  \end{answercode}
+  
+\item[(c)]
+  \tf.
+  An assembly instruction translates to one machine instruction.
+  \\
+  \ANSWER\vspace{4mm}
+  \begin{answercode}
+    t
+  \end{answercode}
+  
+\item[(d)]
+  The five parts of a computer are
+  \\
+  \ANSWER\vspace{4mm}
+  \begin{answercode}
+    input
+    output
+    Memory
+
+  \end{answercode}
+
+  
+\item[(e)]
+  The CPU or processor is made up of the following two parts:
+  \\
+  \ANSWER\vspace{4mm}
+  \begin{answercode}
+    Cache
+    Chip
+  \end{answercode}
+  
+\item[(f)]
+  Which of the following provides the fastest
+  storage mechanism. Choose one.
+  \begin{itemize}
+  \item[a.] CPU Cache
+  \item[b.] Register file
+  \item[b.] Memory
+  \item[c.] External storage (such as hard drive)
+  \end{itemize}
+  \ANSWER\vspace{4mm}
+  \begin{answercode}
+    a
+  \end{answercode}
+\end{itemize}
+
+% ------------------------------------------------------------------------------
+\newpage
+\nextq
+Joe Cantcode wrote the following code to display the first
+integer in the data segment 
+to the
+console.
+But it doesn't work!!! Correct it.
+In the code below, the first integer in the data segment is 2010.
+But you cannot assume that it won't change in the future.
+You must not change the data segment.
+
+(From the management: This is a warm-up. Just insert one line.)
+
+\textsc{Answer:}
+\begin{answercode}  
+	  .text
+	  .globl    main
+          
+main:     
+    la        $a0, odyssey
+	  lw        $a0, 0($a0)
+    li        $v0, 1
+	  syscall
+
+	  li        $v0, 10
+	  syscall
+
+          .data
+odyssey:  .word 2010
+\end{answercode}
+
+% ------------------------------------------------------------------------------
+\newpage
+\nextq
+Tom Toofaz always jumps into his project assignments and hack out code ... and
+ends up spending his night in the office.
+He's having problem implementing the following requirement
+in MIPS with less than four \verb!t!--registers.
+But his manager, Sloe Arnn Steady, told him that four is \textit{way} too many.
+Help Tom and he'll buy you lunch.
+
+Write a code segment in MIPS to compute
+\verb!9 * a - (b + c) + d! where
+\verb!$s0!, \verb!$s1!, \verb!$s2!, and
+\verb!$s3! have values of the C/C++ integer variables
+\verb!a!, \verb!b!, \verb!c!, \verb!d! respective.
+The result must be placed in \verb!$s4!.
+Your code must be as efficient as possible and you must use your registers
+efficiently too.
+You may assume that the \verb!t!-registers are not used elsewhere, and so you
+can use the \verb!t!--registers in your code.
+No such guarantee for the \verb!s!-registers -- therefore
+you cannot change the values in
+\verb!$s0!, \verb!$s1!, \verb!$s2!, and \verb!$s3!.
+You also cannot use the \verb!a!-- and \verb!v!--registers.
+Do not use the \verb!mul! or \verb!mult! command.
+Write down the number of \verb!t!-registers used.
+\\
+\ANSWER
+\begin{answercode}
+# 9 * a - (b + c) + d
+move  $t0, $s0       
+add   $t0, $t0, $t0 
+add   $t0, $t0, $t0 
+add   $t0, $t0, $t0 # t0 = 8 * a
+add   $t0, $t0, $s0 # t0 = 9 * a   
+move  $t1, $s1      # t1 = b
+add   $t1, $t1, $s2 # t1 = b + c
+sub   $t0, $t0, $t1 # t0 = 9 * a - (b + c)
+add   $s4, $t0, $s3 # s4 = 9 * a - (b + c) + d
+\end{answercode}
+\vspace{-4mm}
+(Code fragment, not a complete program.)
+
+Number of \verb!t!--registers used:
+\\
+\ANSWER
+\begin{answercode}
+2
+\end{answercode}
+
+
+
+% ------------------------------------------------------------------------------
+\newpage
+\nextq
+The following is an attempt by Sue Longlunch to scan an array of 
+words and to add 10 to each word in that array. 
+The array has size 20 and base address is in register 
+\verb!$s0!.
+Your manager is fuming mad because there are bugs in the code
+(and Sue is still at lunch) and have asked you to
+do a code review and 
+writing in some comments.
+You should write \lq\lq \verb!should be: xxxxx!" to replace
+the code or
+\lq\lq\verb!insert here: xxxxx!" to insert some code between two lines.
+
+\begin{answercode}
+
+  ///// will come back to this
+                                   COMMENTS TO SUEa
+        addi    $t0, $s0, 20       should be: ????
+
+loop:   blt     $s0, $t1, exit:    
+                                   insert here: ????
+        move    $t1, 0($s0)        
+
+        addi    $s0, $s0, 1        
+
+        addi    $t1, $t1, 10       
+                                     
+        jr      loop                 
+exit:
+\end{answercode}
+
+% ------------------------------------------------------------------------------
+\newpage
+\nextq
+While working on an artificial neural network,
+your senior teammate Arnie Ned needs you to write a MIPS code fragment to 
+\lq\lq clamp" the integer value in \verb!$s0! at \verb!-5! and \verb!5!.
+In other words
+if \verb!$s0! is less than \verb!-5!,
+\verb!$s0! is set to \verb!-5!.
+If the value of \verb!$s0! is
+greater than \verb!5!,
+\verb!$s0! is set to \verb!5!.
+Otherwise, the value in \verb!$s0! is unchanged.
+
+\textsc{Answer:}
+\begin{answercode}
+li  $t0, 5
+ble $s0, $t0 clamp_upper # if(s0 <= t0) {/*do nothing*/}
+  li  $s0, 5
+clamp_upper:
+li  $t0, -5
+bge $s0, $t0 clamp_lower # if(s0 >= -5) {/*do nothing*/}
+  li  $s0, 5
+clamp_lower:
+\end{answercode}
+\vspace{-4mm}
+(Code fragment, not a complete program.)
+
+%------------------------------------------------------------------------------
+\newpage
+\nextq
+What is the MIPS code fragment for the C code
+\[
+  \verb!f[i + 2] = f[i + 1] + f[i];!
+\]
+where \verb!f! is an array of integers.
+The base
+address of \verb!f! is associated with \verb!$t0!, \verb!i!
+is associated with \verb!$t1!.
+
+\textsc{Answer:}
+\begin{answercode}
+# t0 = f[]
+# t1 = i
+addu  $t2, $t1, $t1
+addu  $t2, $t2, $t2
+addu  $t2, $t2, $t0
+lw    $t2, 0($t2)
+addiu $t3, $t1, 1
+addu  $t3, $t3, $t3
+addu  $t3, $t3, $t3
+addu  $t3, $t3, $t0
+lw    $t3, 0($t3)
+add   $t2, $t2, $t3 # t2 = f[i+1]+f[i]
+addiu $t3, $t1, 2
+addu  $t3, $t3, $t3 
+addu  $t3, $t3, $t3 
+addu  $t3, $t3, $t0 # t3 = f[i + 2]
+sw    $t2, 0($t3)0
+
+\end{answercode}
+
+% ------------------------------------------------------------------------------
+\newpage
+\nextq
+Your project leader Lee Pointa
+wants you to write some MIPS code to perform the first pass of bubblesort
+(in ascending order)
+on an
+integer array,
+which will be used in a bubblesort that Bubba Short will use.
+Lee says that the base address of the array is stored in \verb!$a0!
+and the number of values in the array is stored in \verb!$a1!.
+Another thing: Lee tells you he prefers you do not use an index variable, but
+rather, use a pointer to iterate over the array.
+(Look at his lastname.)
+
+\textsc{Answer:}
+\begin{answercode}
+# a0 = x[]
+# a1 = n
+addu  $t0, $a1, $a1
+addu  $t0, $t0, $t0 
+addu  $t0, $t0, $a0 #  t0 = x[n]
+bubblesort_loop:
+blt   $a0, $t0, bubblesort_loop_end
+  lw  $t1, 0($a0)
+  lw  $t2, 4($a0)
+  blt $t1, $t2, bubblesort_swap # if(t1 > t2) {}
+    j bubblesort_loop_continue
+  bubblesort_swap:
+    sw  $t2, 0($a0)
+    sw  $t1, 4($a0)
+  bubblesort_loop_continue:
+addiu $a0, $a0, 4
+j   bubblesort_loop
+bubblesort_loop_end:
+\end{answercode}
+\vspace{-4mm}
+(Code fragment, not a complete program.)
+
+%------------------------------------------------------------------------------
+\newpage
+\nextq
+It's lunchtime ... the company quiz for today is below.
+The winner is the first to answer all questions correctly.
+Work fast: Lee Pointa is really good with these type of questions.
+
+(a) What's in \verb!$s1!, \verb!$s2!, and \verb!$s3!
+at the end of the code fragment (i.e., not complete program)?
+(Write ERROR if the value is not an integer value.)
+\begin{Verbatim}[frame=single,fontsize=\small]
+        .text
+        .globl main        
+        [code omitted]
+        la     $s0, L       # s0 = L
+        lw     $s1, 8($s0)  # s1 = 44
+        lw     $s2, 16($s0) # s2 = 46
+        la     $s0, L1      # s0 = L1
+        lw     $s3, -4($s0) # s3 = 49
+        [code omitted]
+        
+        .data
+L:      .word 42 43 44 45
+        .word 46 47 48 49
+L1:     .word 50 51 52 53
+        .word 54 55 56 57
+\end{Verbatim}
+\textsc{Answer:}
+\\
+\verb!$s1! \answerbox{44} \hspace{1cm}
+\verb!$s2! \answerbox{46} \hspace{1cm}
+\verb!$s3! \answerbox{49} \\
+
+(b)
+What is the value of \verb!$s2! at the end of the code fragment?
+(Write ERROR if the value is not an integer value.)
+\begin{Verbatim}[frame=single,fontsize=\small]
+        .text
+        .globl main        
+        [code omitted]
+        la     $s0, W       
+        lw     $s1, 4($s0)  # s1 = 2
+        lw     $s2, 8($s1)  # error
+        [code omitted]
+        
+        .data
+X:      .word 1 2 3 4
+Y:      .word 5 6 7 8
+Z:      .word 9 10 11 12
+W:      .word X Y Z
+\end{Verbatim}
+\textsc{Answer:} \\
+\verb!$s2! \answerbox{ERROR}
+
+%------------------------------------------------------------------------------
+\newpage
+\nextq
+Write a MIPS code fragment that, starting with $n$ (assume stored in
+\verb!$s0!),
+it
+continually computes $3n + 1$ if $n$ is odd or $n/2$
+if $n$ is even
+and store it back into $n$ until $n$ is $1$.
+(\verb!/! is integer division.)
+The values of $n$ are stores in an array in the data segment --
+a label \verb!L! is already created for you (you don't have to create it).
+For instance if the user
+enters $3$, then the values are
+\[
+  3, 10, 5, 16, 8, 4, 2, 1
+\]
+For instance when $n = 3$, since $n$ is odd,
+the next value of $n$ is $3n + 1 = 10$.
+The next value for $n = 10$, since $n = 10$ is even,
+is $n / 2 = 10 / 2 = 5$.
+The values
+\[
+  3, 10, 5, 16, 8, 4, 2, 1
+\]
+are stored at the beginning of the data
+segment.
+Note that the starting value $n = 3$ is also stored.
+
+\textsc{Answer:}
+\begin{answercode}
+  # s0 = n
+  # t0 = index of L
+  la    $t0, L
+  sw    $s0, 0($t0)
+  addiu $t0, $t0, 4
+  loop:
+  li    $t1, 1
+  beq   $s0, $t1, loop_exit
+  li    $t1, 2
+  div   $s0, $t1
+  hfhi  $t1
+  beq   $t1, $0, comput_even # if(t1 == 0)
+    mult  $s0, 3
+    mflo  $s0
+    addi  $s0, $s0, 1
+    sw    $s0, 0($t0)
+    addiu $t0, $t0, 4
+    j   loop
+  comput_even:
+    div   $s0, $t1
+    mfhi  $s0
+    sw    $s0, 0($t0)
+    addiu $t0, $t0, 4
+  j loop
+  loop_exit:
+
+  .data
+L:    .word
+\end{answercode}
+
+%------------------------------------------------------------------------------
+\newpage
+\nextq
+Your boss just did a code review and found that Joe Cantcode
+wrote some MIPS code implementing the following idea
+in a critical part of the code to auto-correct
+the tilt actuators on a high speed train:
+\begin{Verbatim}[frame=single]
+if (t0 == 0)
+{
+    t1 = 12;
+}
+else if (t0 == 1)
+{
+    t1 = 34;
+}
+else if (t0 == 2)
+{
+    t1 = 56;
+}
+else if (t0 == 3)
+{
+    t1 = 78;
+}
+\end{Verbatim}
+where variables 
+\verb!t0!,
+\verb!t1!
+and associated with registers
+\verb!$t0!,
+\verb!$t1!
+respectively.
+He has asked you rewrite the code to implement a switch 
+in MIPS using the
+jump table method 
+\begin{Verbatim}[frame=single]
+switch (t0)
+{
+    case 0:
+        t1 = 12;
+        break;
+    case 1:
+        t1 = 34;
+        break;
+    case 2:
+        t1 = 56;
+        break;
+    case 3:
+        t1 = 78;
+}
+\end{Verbatim}
+so that he can do some 
+performance analysis and see if the jump table method is faster.
+
+\textsc{Answer.}
+Implement the switch here
+\begin{answercode}
+        .text
+        .globl main
+main:
+      li    $t0, 0           # your code must work for different values of t0
+      la    $t1, Jtable
+      addiu $t0, $t0, $t0
+      addiu $t0, $t0, $t0
+      addiu $t0, $t0, $t1
+      jr    $t0 
+      # implement switch below
+      L0:
+        li  $t1, 12
+        j   exit
+      L1:
+        li  $t1, 34
+        j   exit
+      L2:
+        li  $t1, 56
+        j   exit
+      L3:
+        li  $t1, 78
+      # At this point $t1 must be set to the right value based on your
+      # implementation of switch
+exit:
+      li $v0, 10          # exit
+      syscall
+
+      .data
+Jtable: L0, L1, L2, L3
+\end{answercode}
+
+%------------------------------------------------------------------------------
+\newpage
+\nextq
+Implement the following C/C++ code fragment in
+MIPS code fragment
+\[
+  \verb!y2 = x * x * x + 2 * x * x + 3 * x + 4;!
+\]
+where \verb!y2! is \verb!$s0! and \verb!x! is \verb!$s1!.
+Assume that the cost of
+multiplication is higher than the cost of addition.
+Say the cost of multiplication is 20 and addition is 1.
+You want your MIPS code to be as fast as possible
+since the above is used in performing 
+error correction codes in signal processing.
+The project leader, Zig Nell,
+claims that it can be done with two multiplications.
+
+\textsc{Answer:}
+\begin{answercode}
+# s0 = y2
+# s1 = X
+addi  $t0, $s1, 2
+mult  $t0, $s1
+mflow $t0
+addi  $t0, $t0, 3
+mult  $t0, $s1
+addi  $s0, $t0, 4
+\end{answercode}
+
+% ------------------------------------------------------------------------------
+\newpage
+\nextq
+Just great.
+Bubba Short is not back from lunch.
+Lee Pointa said you have to write the bubblesort as a function  for him.
+Remember that
+the base address of the array is stored in \verb!$a0!
+and the number of values in the array is stored in \verb!$a1!.
+Just to be somewhat organized Lee told you to include at least
+a \verb!swap! function that swaps the integer values at
+addresses stored in \verb!$a0! and \verb!$a1!.
+(You can add more functions if you like.
+For instance you might want to have a function that performs
+one pass of bubblesort.)
+
+\textsc{Answer:}
+\begin{answercode}
+swap: # a0 = larger a1 = smaller
+  lw  $t0, 0($a0)
+  lw  $t1, 0($a1)
+  sw  $t0, 0($a1)
+  sw  $t1, 0($a0)
+  jr  $ra
+
+bubblesort_iterate:
+  # a0 = x[]
+  # a1 = i
+  bubblesort_iterate_loop:
+  blt   $a0, $a1, bubblesort_iterate_loop_end
+    lw  $t1, 0($a0)
+    lw  $t2, 4($a0)
+    blt $t1, $t2, bubblesort_iterate_swap # if(t1 > t2) {}
+      j bubblesort_iterate_loop_continue
+    bubblesort_iterate_swap:
+      sw  $t2, 0($a0)
+      sw  $t1, 4($a0)
+    bubblesort_iterate_loop_continue:
+  addiu $a0, $a0, 4
+  j   bubblesort_iterate_loop
+  bubblesort_iterate_loop_end:
+  jr    $ra
+
+bubblesort: # a0 = x[], a1 = n
+  addu  $t1, $a1, $a1
+  addu  $t1, $t1, $t1
+  addu  $t1, $t1, $a0 # t0 = x[n]
+  move  $t0, $a0
+  bubblesort_loop:
+  beq   $t1, $t0, bubblesort_loop_exit
+      addiu $sp, $sp, -12
+      sw    $ra, 0($sp)
+      sw    $a0, 4($sp)
+      sw    $a1, 8($sp)
+        move  $a1, $t1
+        jal   bubblesort_iterate
+      lw    $a1, 8($sp)
+      lw    $a0, 4($sp)
+      sw    $ra, 0($sp)
+  addiu $t1, $t1, -4 
+  j     bubblesort_loop
+  bubblesort_loop_exit:
+  jr    $ra
+\end{answercode}
+
+%------------------------------------------------------------------------------
+\newpage
+\input{instructions}
+\end{document}
