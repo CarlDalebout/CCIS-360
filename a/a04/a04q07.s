@@ -24,6 +24,10 @@ newln:
     jr      $ra
 
 print_math:
+    #
+    #
+    #
+    #
     
 
 main:
