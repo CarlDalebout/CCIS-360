@@ -6,8 +6,8 @@
 CXX       = g++
 CXXFLAGS  = -g -Wall
 LINK      = g++
-OBJS      = Conversion.o 	\
-			Manipulation.o 	\
+OBJS      = Register.o 	\
+			Token.o		\
 			main.o
 EXE 		= main.exe
 
@@ -36,11 +36,18 @@ $(EXE): 	$(OBJS)
 #
 # Body.o: Body.h Body.cpp
 # 	$(CXX) $(CXXFLAGS) Body.cpp -c -o Body.o
-Conversion.o: Conversion.h Conversion.cpp
-	$(CXX) Conversion.cpp -c -o Conversion.o
+#
+# Conversion.o: Conversion.h Conversion.cpp
+# 	$(CXX) Conversion.cpp -c -o Conversion.o
+#
+# Manipulation.o: Manipulation.h Manipulation.cpp
+# 	$(CXX) Manipulation.cpp -c -o Manipulation.o
 
-Manipulation.o: Manipulation.h Manipulation.cpp
-	$(CXX) Manipulation.cpp -c -o Manipulation.o
+Register.o: Register.h Register.cpp
+	$(CXX) Register.cpp -c -o Register.o
+
+Token.o: Token.h Token.cpp
+	$(CXX) Token.cpp -c -o Token.o
 
 #------------------------------------------------------------------------------
 # Utilities
