@@ -12,6 +12,55 @@ bool found (char ch, std::string input)
     return false;
 }
 
+uint8_t  Token::reg_to_code(int index)
+{   
+    std::string tok = tokens_[index];
+    if(tok.size() > 2)
+    {
+         std::cout << "reg " << tok << " does not exist return 0\n";
+        return 0x00000;
+    }
+
+    if(tok[0] == 0)
+    {
+        return 0x0000;
+    }
+    else if(tok[0] == 'v')
+    {
+        std::cout << "checking v's\n";
+        if(tok[1] == '0' || tok[1] == '1')
+            return 0x0000 + (int)tok[1] - 46;
+    }
+    else if (tok[0] == 'a')
+    {
+        std::cout << "checking a's\n";
+        if((int)tok[1] - 48 >= 0 && (int)tok[1] - 48 < 4)
+            return 0x0000 + (int)tok[1] - 44;
+    }
+    else if (tok[0] == 't')
+    {
+       std::cout << "checking t's\n";
+        if((int)tok[1] - 48 >= 0 && (int)tok[1] - 48 < 8)
+            return 0x0000 + (int)tok[1] - 40;
+        else if((int)tok[1] - 48 >= 8 && (int)tok[1] - 48 < 10)
+            return 0x0000 + (int)tok[1] - 32;
+    }
+    else if (tok[0] == 's')
+    {
+        std::cout << "checking s's\n";
+        if((int)tok[1] - 48 >= 0 && (int)tok[1] - 48 < 8)
+            return 0x0000 + (int)tok[1] - 32;
+    }
+    else if(tok == "ra")
+    {
+        std::cout << "checking ra\n";
+        return 31;
+    }
+
+    std::cout << "reg " << tok << " does not exist return 0\n";
+    return 0x00000;
+}
+
 Token::Token(std::string input, std::string separators)
 :separators_(separators)
 {
@@ -26,7 +75,7 @@ Token::Token(std::string input, std::string separators)
             if(token != "")
             {
                 tokens_.push_back(token);
-                std::cout << "token done ... " << token << '\n';
+                // std::cout << "token done ... " << token << '\n';
                 token = "";
             }
         }
@@ -39,6 +88,7 @@ Token::Token(std::string input, std::string separators)
     }
     if (token != "")
         tokens_.push_back(token);
+    // std::cout << "tok has made " << tokens_.size() << " tokens\n";
 }
 
 void Token::add_separators(std::string separators)
@@ -56,6 +106,12 @@ void Token::push_back(std::string input)
     {
         tokens_.push_back(temp[i]);
     }
+    // std::cout << "tok has " << tokens_.size() << " tokens\n";
+}
+
+void Token::clear()
+{
+    tokens_.clear();
 }
 
 std::string Token::pop_front()
@@ -63,6 +119,15 @@ std::string Token::pop_front()
     std::string ret = tokens_[0];
     tokens_.erase(tokens_.begin(), tokens_.begin()+1);
     return ret;
+}
+
+uint32_t Token::get_machine_code()
+{
+    if(tokens_[0] == "add")
+    {
+
+    }
+    return 0x000;
 }
 
 std::string Token::operator[](int index)

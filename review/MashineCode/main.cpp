@@ -10,6 +10,7 @@ void printbits(uint32_t b)
     }
     std::cout << '\n';
 }
+
 std::ostream & operator<<(std::ostream & cout, std::vector<std::string> tokens)
 {
     std::string delim = "";

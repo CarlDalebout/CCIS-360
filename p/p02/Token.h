@@ -16,8 +16,12 @@ public:
 
     void add_separators(std::string);
     void push_back(std::string);
+    void clear();
 
     std::string pop_front();
+
+    uint8_t  reg_to_code(int index);
+    uint32_t get_machine_code();
 
     std::string operator[](int);
 
