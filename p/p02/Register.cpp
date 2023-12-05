@@ -10,3 +10,13 @@ uint32_t & Register::operator[](int index)
     }
     return registers_[index];
 }
+
+void Register::update(u_int32_t mcode)
+{
+
+}
+
+void Register::print()
+{
+    
+}

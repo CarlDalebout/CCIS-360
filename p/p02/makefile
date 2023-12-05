@@ -8,6 +8,7 @@ CXXFLAGS  = -g -Wall
 LINK      = g++
 OBJS      = Register.o 	\
 			Token.o		\
+			Machine.o	\
 			main.o
 EXE 		= main.exe
 
@@ -48,6 +49,9 @@ Register.o: Register.h Register.cpp
 
 Token.o: Token.h Token.cpp
 	$(CXX) Token.cpp -c -o Token.o
+
+Machine.o: Machine.h Machine.cpp
+	$(CXX) Machine.cpp -c -o Machine.o
 
 #------------------------------------------------------------------------------
 # Utilities

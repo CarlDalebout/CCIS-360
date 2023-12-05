@@ -1,7 +1,59 @@
-#include <iostream>
-#include <vector>
 #include "Machine.h"
-#include "Token.h"
+#include <cmath>
+
+void printbits(uint32_t b, int format)
+{
+    switch (format)
+    {
+        case 0:
+        {
+            for(int i = 31; i >= 26; --i)
+            {
+                std::cout << ((b >> i) & 1);
+            }
+            for(int i = 25; i >=6; --i)
+            {
+                if(i % 5 == 0)
+                    std::cout << ' ';
+                std::cout << ((b >> i) & 1);
+            }
+            std::cout << ' ';
+            for(int i = 5; i >= 0;  --i)
+            {
+                std::cout << ((b >> i) & 1);
+            }
+            std::cout << std::endl;
+        }   break;
+        case 1:
+        {
+            for(int i = 31; i >= 26; --i)
+            {
+                std::cout << ((b >> i) & 1);
+            }
+            for(int i = 25; i >=16; --i)
+            {
+                if(i % 5 == 0)
+                    std::cout << ' ';
+                std::cout << ((b >> i) & 1);
+            }
+            std::cout << ' ';
+            for(int i = 15; i >= 0;  --i)
+            {
+                std::cout << ((b >> i) & 1);
+            }
+            std::cout << std::endl;
+        }   break;
+        default:
+        {
+            for(int i = format-1; i >= 0; --i)
+            {
+                std::cout << ((b >> i) & 1);
+            }
+        }break;
+    }
+}
+
+
 
 Machine::Functions_Op Machine::functions_op_ = 
 {
@@ -45,7 +97,7 @@ Machine::Functions_Op Machine::functions_op_ =
     {"addu",    off( 0, 33, 1)},
     {"lwl",     off(34,  0, 1)},
     {"sub",     off( 0, 34, 0)},
-    {"lw",      off(35,  0, 1)},
+    {"lw",      off(35,  0, 1)}, //special
     {"subu",    off( 0, 35, 0)},
     {"lbu",     off(36,  0, 1)},
     {"and",     off( 0, 36, 0)},
@@ -58,7 +110,7 @@ Machine::Functions_Op Machine::functions_op_ =
     {"sh",      off(41,  0, 1)},
     {"swl",     off(42,  0, 1)},
     {"slt",     off( 0, 42, 0)}, //special
-    {"sw",      off(43,  0, 1)},
+    {"sw",      off(43,  0, 1)}, //special
     {"sltu",    off( 0, 43, 0)},
     {"swr",     off(46,  0, 1)},
     // {"cache",   off(47,  0, 4)},
@@ -81,63 +133,6 @@ Machine::Functions_Op Machine::functions_op_ =
     {"sdc2",    off(62,  0, 1)}  
 };
 
-
-
-void Machine::get_instruction(std::string instruction)
-{
-   switch (int(instruction[0]))
-   {
-        case int('a'):
-                if(instruction == "add")
-                    funct_  = 32;
-                    opcode_ = 0;
-            break;
-    
-        default:
-            break;
-   }
-}
-
-uint32_t Machine::get_machine_code(Token & tok)
-{
-    std::map<std::string, off>::iterator it;
-    it = functions_op_.find(tok[0]);
-
-    uint32_t mcode;
-    if(it != functions_op_.end())
-    {
-        opcode_ = it->second.opcode_;
-        funct_  = it->second.funct_;
-        format_ = it->second.format_;
-
-        if(format_ = 0)
-        {
-            rd_ = reg_to_index(tok[1]);
-            rs_ = reg_to_index(tok[2]);
-            rt_ = reg_to_index(tok[3]);
-            mcode = opcode_ << 26
-            | rs_ << 21
-            | rt_ << 16
-            | rd_ << 11
-            | shamt_ << 6
-            | funct_;
-        }
-
-    }
-    else
-    {
-        std::cout << "error " << tok[0]<< " does not exist" << std::endl;
-    }
-      
-    
-
-    // for (int i = 31; i >= 0; --i)
-    // {
-    //     std::cout << ((mcode >> i) & 1);
-    // }
-    return mcode;
-}
-
 uint8_t  Machine::reg_to_index(std::string tok)
 {   
     if(tok == "zero")
@@ -149,7 +144,7 @@ uint8_t  Machine::reg_to_index(std::string tok)
          std::cout << "reg " << tok << " does not exist return 0\n";
         return 0x00000;
     }
-    if(tok[0] == 0)
+    if(tok[0] == '0')
     {
         return 0x0000;
     }
@@ -188,4 +183,90 @@ uint8_t  Machine::reg_to_index(std::string tok)
     return 0x00000;
 }
 
+uint32_t Machine::get_machine_code(std::vector<std::string> & tokens)
+{
+    std::map<std::string, off>::iterator it;
+    it = functions_op_.find(tokens[0]);
 
+    uint32_t mcode;
+    if(it != functions_op_.end())
+    {
+        opcode_ = it->second.opcode_;
+        funct_  = it->second.funct_;
+        format_ = it->second.format_;
+        
+        // std::cout << "format_: " << (int)format_ << " bits: ";
+        // printbits(format_, 5);
+        // std::cout << std::endl;
+        
+        switch ((int)format_)
+        {
+            case 0:
+            {
+                std::cout << "opcode_: " << (int)opcode_ << " bits: ";
+                printbits(opcode_, 8);
+
+                rd_ = reg_to_index(tokens[1]);
+                std::cout << ", rd_: $" << (int)rd_ << " bits: ";
+                printbits(rd_, 8);
+                
+                rs_ = reg_to_index(tokens[2]);
+                std::cout << ", rs_: $" << (int)rs_ << " bits: ";
+                printbits(rs_, 8);
+                
+                rt_ = reg_to_index(tokens[3]);
+                std::cout << ", rt_: $" << (int)rt_ << " bits: ";
+                printbits(rt_, 8);
+                
+                std::cout << ", shamt_: " << (int)shamt_ << " bits: ";
+                printbits(shamt_, 8);
+
+                std::cout << ", funct_: " << (int)funct_ << " bits: ";
+                printbits(funct_, 8);
+
+                std::cout << std::endl;
+                
+                mcode = opcode_ << 26
+                | rs_ << 21
+                | rt_ << 16
+                | rd_ << 11 
+                | shamt_ << 6
+                | funct_;
+            } break;
+            case 1:
+            {
+                std::cout << "opcode_: " << (int)opcode_ << " bits: ";
+                printbits(opcode_, 8);
+
+                rs_ = reg_to_index(tokens[2]);
+                std::cout << ", rs_: " << (int)rs_ << " bits: ";
+                printbits(rs_, 8);
+                
+                rt_ = reg_to_index(tokens[1]);
+                std::cout << ", rt_: $" << (int)rt_ << " bits: ";
+                printbits(rt_, 8);
+
+                immediate_ = stoi(tokens[3]);
+                std::cout << ", immediate" << (int)immediate_ << " bits: ";
+                printbits(immediate_, 16);
+
+                std::cout << std::endl;
+                mcode = opcode_ << 26
+                | rs_ << 21
+                | rt_ << 16
+                | immediate_;
+            }break;
+        }
+        printbits(mcode, format_);
+    }
+    else
+    {
+        std::cout << "error " << tokens[0]<< " does not exist" << std::endl;
+    }
+      
+    // for (int i = 31; i >= 0; --i)
+    // {
+    //     std::cout << ((mcode >> i) & 1);
+    // }
+    return mcode;
+}

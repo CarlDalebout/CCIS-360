@@ -4,14 +4,15 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <vector>
 #include "Token.h"
 
 struct off
 {
-    int opcode_;
-    int funct_;
-    int format_;
-    off(int opcode, int funct, int format)
+    uint8_t opcode_;
+    uint8_t funct_;
+    uint8_t format_;
+    off(uint8_t opcode, uint8_t funct, uint8_t format)
     {
         opcode_ = opcode;
         funct_  = funct;
@@ -25,18 +26,18 @@ public:
     Machine()
     {}
     
-    void     get(std::string);
-    void     get_instruction(std::string);
-    uint8_t  reg_to_index(std::string tok);
-    uint32_t get_machine_code(Token &);
+    uint8_t  reg_to_index(std::string);
+    
+    uint32_t get_machine_code(std::vector<std::string> &);
 
 private:
-    uint32_t opcode_;
-    uint32_t rs_;
-    uint32_t rt_;
-    uint32_t rd_;
-    uint32_t shamt_;
-    uint32_t funct_;
+    uint8_t opcode_;
+    uint8_t rs_;
+    uint8_t rt_;
+    uint8_t rd_;
+    uint16_t immediate_;
+    uint8_t shamt_;
+    uint8_t funct_;
     int      format_;
     typedef std::map<std::string, off> Functions_Op;
     static Functions_Op functions_op_;

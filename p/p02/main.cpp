@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <string>
 #include <map>
 #include "Register.h"
@@ -29,7 +30,9 @@ int main()
         getline(std::cin, user_input);
         tok.push_back(user_input);
 
-        printbits(machine.get_machine_code(tok));
+        machine.get_machine_code(tok.tokens());
+        tok.clear();
+        // printbits(mcode);
     }
     return 0;
 }
