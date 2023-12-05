@@ -19,12 +19,8 @@ public:
     void clear();
 
     std::string pop_front();
-
-    uint8_t  reg_to_code(int index);
-    uint32_t get_machine_code();
-
     std::string operator[](int);
-
+    
 private:
     std::vector<std::string> tokens_;
     std::string separators_;
