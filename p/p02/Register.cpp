@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Register.h"
 
-uint32_t & Register::operator[](int index)
+uint8_t & Register::operator[](int index)
 {
     if(index >= 32)
     {
@@ -11,9 +11,12 @@ uint32_t & Register::operator[](int index)
     return registers_[index];
 }
 
-void Register::update(u_int32_t mcode)
+void Register::update(Machine & machine)
 {
+    if(machine.opcode() == 0)
+    {
 
+    }
 }
 
 void Register::print()

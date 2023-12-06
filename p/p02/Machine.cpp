@@ -177,7 +177,7 @@ uint8_t  Machine::reg_to_index(std::string tok)
     else if(tok == "ra")
     {
         // std::cout << "checking ra\n";
-        return 31;
+        return 0x0031;
     }
     std::cout << "reg " << tok << " does not exist return 0\n";
     return 0x00000;
@@ -204,25 +204,25 @@ uint32_t Machine::get_machine_code(std::vector<std::string> & tokens)
             case 0:
             {
                 std::cout << "opcode_: " << (int)opcode_ << " bits: ";
-                printbits(opcode_, 8);
+                printbits(opcode_, 6);
 
                 rd_ = reg_to_index(tokens[1]);
-                std::cout << ", rd_: $" << (int)rd_ << " bits: ";
-                printbits(rd_, 8);
+                std::cout << ", rd_: $" << tokens[1] << "($" << (int)rd_ << ") bits: ";
+                printbits(rd_, 5);
                 
                 rs_ = reg_to_index(tokens[2]);
-                std::cout << ", rs_: $" << (int)rs_ << " bits: ";
-                printbits(rs_, 8);
+                std::cout << ", rs_: $" << tokens[2] << "($" << (int)rs_ << ") bits: ";
+                printbits(rs_, 5);
                 
                 rt_ = reg_to_index(tokens[3]);
-                std::cout << ", rt_: $" << (int)rt_ << " bits: ";
-                printbits(rt_, 8);
+                std::cout << ", rt_: $" << tokens[3] << "($" << (int)rt_ << ") bits: ";
+                printbits(rt_, 5);
                 
                 std::cout << ", shamt_: " << (int)shamt_ << " bits: ";
-                printbits(shamt_, 8);
+                printbits(shamt_, 5);
 
                 std::cout << ", funct_: " << (int)funct_ << " bits: ";
-                printbits(funct_, 8);
+                printbits(funct_, 6);
 
                 std::cout << std::endl;
                 
@@ -239,7 +239,7 @@ uint32_t Machine::get_machine_code(std::vector<std::string> & tokens)
                 printbits(opcode_, 8);
 
                 rs_ = reg_to_index(tokens[2]);
-                std::cout << ", rs_: " << (int)rs_ << " bits: ";
+                std::cout << ", rs_: $" << (int)rs_ << " bits: ";
                 printbits(rs_, 8);
                 
                 rt_ = reg_to_index(tokens[1]);

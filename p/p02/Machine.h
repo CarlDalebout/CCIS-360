@@ -26,6 +26,27 @@ public:
     Machine()
     {}
     
+    uint8_t  & opcode()         { return opcode_; }
+    uint8_t    opcode()   const { return opcode_; }
+
+    uint8_t  & rs()             { return rs_; }
+    uint8_t    rs()       const { return rs_; }
+    
+    uint8_t  & rt()             { return rt_; }
+    uint8_t    rt()       const { return rt_; }
+    
+    uint8_t  & rd()             { return rd_; }
+    uint8_t    rd()       const { return rd_; }
+    
+    uint16_t & immedite()       { return immediate_; }
+    uint16_t   immedite() const { return immediate_; }
+    
+    uint8_t  & shamt()          { return shamt_; }
+    uint8_t    shamt()    const { return shamt_; }
+    
+    uint8_t  & funct()          { return funct_; }
+    uint8_t    funct()    const { return funct_; }
+
     uint8_t  reg_to_index(std::string);
     
     uint32_t get_machine_code(std::vector<std::string> &);
