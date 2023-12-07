@@ -7,6 +7,9 @@
 #include "Machine.h"
 #include "Token.h"
 
+Register reg;
+Machine  machine;
+
 void printbits(uint32_t b)
 {
     for(int i = 31; i >= 0; --i)
@@ -113,10 +116,63 @@ std::string to_hex(int value)
     return ret;
 }
 
+bool check_at_functions(std::vector<std::string> tokens)
+{
+    if(tokens[0][0] == '@')
+    {
+        if(tokens[0] == "@print")
+        {
+            if(tokens[1] == "reg")
+            {
+                reg.print();
+            }
+            else if(tokens[1] == "data")
+            {
+                //stack.print()
+            }
+            else if(tokens[1] == "mcode")
+            {
+                if(tokens[2] == "true")
+                {
+                    std::cout << "\nprinting machine code\n\n";
+                    machine.mcode() = true;
+                    // std::cout << machine.mcode() << std::endl;
+                }
+                else if(tokens[2] == "false")
+                {
+                    std::cout << "\nnot printing machine code\n\n";
+                    machine.mcode() = false;
+                    // std::cout << machine.mcode() << std::endl;
+                }
+                else
+                {
+                    std::cout << "Error at code {";
+                    std::string dir = ""; 
+                    for(long unsigned int i = 0; i < tokens.size(); ++i)
+                    {
+                        std::cout << dir << tokens[i]; dir = " ";
+                    }
+                    std::cout << "} does not exist\n";
+                }
+            }
+        }
+        else
+        {
+            std::cout << "Error at code {";
+            std::string dir = ""; 
+            for(long unsigned int i = 0; i < tokens.size(); ++i)
+            {
+                std::cout << dir << tokens[i]; dir = " ";
+            }
+            std::cout << "} does not exist\n";
+        }
+        return true;
+    }
+    return false;
+}
+
 int main()
 {
-    Register reg;
-    Machine  machine;
     std::string user_input;
     std::string seperators = " \t,$()";
     Token tok("", seperators);
@@ -130,7 +186,15 @@ int main()
         if(user_input == "")
             continue;
         tok.push_back(user_input);
-
+        
+        if(check_at_functions(tok.tokens()))
+        {
+            tok.clear();
+            continue;
+        }
+        
+        if(tok[0] == "move")
+            tok.push_back("$0");
         machine.get_machine_code(tok.tokens());
         reg.update(machine);
         tok.clear();
