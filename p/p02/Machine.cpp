@@ -53,12 +53,10 @@ void printbits(uint32_t b, int format)
     }
 }
 
-
-
 Machine::Functions_Op Machine::functions_op_ = 
 {
     {"sll",     off( 0,  0, 0)}, 
-    {"li",      off( 0,  1, 1)}, // added for testing
+    {"li",      off( 1,  0, 3)}, // added for testing
     {"j",       off( 2,  0, 2)},
     {"srl",     off( 0,  2, 0)},
     {"jal",     off( 3,  0, 2)},
@@ -87,10 +85,10 @@ Machine::Functions_Op Machine::functions_op_ =
     // {"sync", off   ( 0, 15,  3)},
     {"mfhi",    off( 0, 16, 0)},
     {"mflo",    off( 0, 18, 0)},
-    {"mult",    off( 0, 24, 3)},
-    {"multu",   off( 0, 25, 3)}, //special
-    {"div",     off( 0, 26, 3)}, //special
-    {"divu",    off( 0, 27, 3)}, //special
+    {"mult",    off( 0, 24, 0)},
+    {"multu",   off( 0, 25, 0)},
+    {"div",     off( 0, 26, 0)},
+    {"divu",    off( 0, 27, 0)},
     {"lb",      off(32,  0, 1)},
     {"add",     off( 0, 32, 0)},
     {"move",    off( 0, 32, 0)}, //special
@@ -202,16 +200,36 @@ uint32_t Machine::get_machine_code(std::vector<std::string> & tokens)
         // std::cout << "format_: " << (int)format_ << " bits: ";
         // printbits(format_, 5);
         // std::cout << std::endl;
-        // std::cout << print_mcode_ << std::endl;
         
         switch ((int)format_)
         {
             case 0:
             {
-                rd_ = reg_to_index(tokens[1]);
-                rs_ = reg_to_index(tokens[2]);
-                rt_ = reg_to_index(tokens[3]);
-                
+                if     (funct_ >= 0 && funct_ <= 7)
+                {
+                    rd_     = reg_to_index(tokens[1]);
+                    rt_     = reg_to_index(tokens[2]);
+                    rs_     = reg_to_index("zero");
+                    shamt_  = stoi(tokens[3]);
+                }
+                else if     (funct_ >= 16 && funct_ <= 19)
+                {
+                    rd_ = reg_to_index(tokens[1]);
+                    rs_ = reg_to_index("zero");
+                    rt_ = reg_to_index("zero");
+                }
+                else if(funct_ >= 24 && funct_ <= 27)
+                {
+                    rd_ = reg_to_index("zero");
+                    rs_ = reg_to_index(tokens[1]);
+                    rt_ = reg_to_index(tokens[2]);
+                }
+                else
+                {
+                    rd_ = reg_to_index(tokens[1]);
+                    rs_ = reg_to_index(tokens[2]);
+                    rt_ = reg_to_index(tokens[3]);
+                }
                 if(print_mcode_ == true)
                 {
                     std::cout << "opcode_: " << (int)opcode_ << " bits: ";
@@ -243,17 +261,9 @@ uint32_t Machine::get_machine_code(std::vector<std::string> & tokens)
             } break;
             case 1:
             {
-                rt_ = reg_to_index(tokens[1]);
-                if(tokens[2][0] == '$')
-                {
-                    rs_ = reg_to_index(tokens[2]);
-                    immediate_ = stoi(tokens[3]);
-                }
-                else
-                {
-                    rs_ = reg_to_index("0");
-                    immediate_ = stoi(tokens[2]);
-                }
+                rt_         = reg_to_index(tokens[1]);
+                rs_         = reg_to_index(tokens[2]);
+                immediate_  = stoi(tokens[3]);
                 if(print_mcode_ == true)
                 {
                     std::cout << "opcode_: " << (int)opcode_ << " bits: ";
@@ -277,7 +287,42 @@ uint32_t Machine::get_machine_code(std::vector<std::string> & tokens)
             }break;
             case 2:
             {
+                // immediate_ = 
             }break;
+            case 3:
+            {
+                switch (opcode_)
+                {
+                    case 1:
+                    {
+                        rt_ = reg_to_index(tokens[1]);
+                        rs_ = reg_to_index("zero");
+                        immediate_ = stoi(tokens[2]);
+                        if(print_mcode_ == true)
+                            {
+                                std::cout << "opcode_: " << (int)opcode_ << " bits: ";
+                                printbits(opcode_, 8);
+
+                                std::cout << ", rs_: $" << (int)rs_ << " bits: ";
+                                printbits(rs_, 8);
+                                
+                                std::cout << ", rt_: $" << (int)rt_ << " bits: ";
+                                printbits(rt_, 8);
+
+                                std::cout << ", immediate" << (int)immediate_ << " bits: ";
+                                printbits(immediate_, 16);
+
+                                std::cout << std::endl;
+                            }
+                            mcode = opcode_ << 26
+                            | rs_ << 21
+                            | rt_ << 16
+                            | immediate_;
+                    }break;
+                    default:
+                    {}break;
+                }
+            }
         }
         if(print_mcode_ == true)
             printbits(mcode, format_);

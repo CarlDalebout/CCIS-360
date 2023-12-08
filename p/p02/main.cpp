@@ -182,6 +182,7 @@ int main()
     while(running)
     {
         std::cout << "TEXT: " << to_hex(reg.pc()) << "> "; 
+
         getline(std::cin, user_input);
         if(user_input == "")
             continue;

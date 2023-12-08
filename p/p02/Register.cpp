@@ -234,263 +234,359 @@ void Register::update(Machine & machine)
     switch (machine.opcode())
     {
         case  0:
-            {
-                switch (machine.funct())
+        {
+            switch (machine.funct())
+            {   
+                case  0:
+                {
+                    //sll
+                    registers_[machine.rd()] = registers_[machine.rt()] << machine.shamt();
+                }break;
+                case  2:
+                {
+                    //srl
+                    registers_[machine.rd()] = registers_[machine.rt()] >> machine.shamt();
+                }break;
+                case  3:
+                {
+                    //sra
+                    registers_[machine.rd()] = registers_[machine.rt()] >> machine.shamt();
+                }break;
+                case  4:
+                {
+                    //sllv
+                }break;
+                case  6:
+                {
+                    //srlv
+                }break;
+                case  7:
+                {
+                    //srav
+                }break;
+                case  8:
+                {
+                    //jr
+                    pc_ = registers_[machine.rs()];
+                }break;
+                case  9:
+                {
+                    //jalr
+                }break;
+                case 10:
+                {
+                    //movz
+                }break;
+                case 11:
+                {
+                    //movn
+                }break;
+                case 12:
+                {
+                    //syscall
+                
+                }break;
+                case 13:
+                {
+                    //break
+                }break;
+                case 15:
+                {
+                    //sync
+                }break;
+                case 16:
+                {
+                    //mfhi
+                    registers_[machine.rd()] = hi_;
+                }break;
+                case 18:
+                {
+                    //mflo
+                    registers_[machine.rd()] = lo_;
+                }break;
+                case 24:
                 {   
-                    case  0:
-                    {
-                        //sll
-                        registers_[machine.rd()] = registers_[machine.rs()] << machine.rt();
-                    }break;
-                    case  1:
-                    {
-                        //li
-                        registers_[machine.rt()] = machine.immedite();
-                    }break;
-                    case  2:
-                    {
-                        //srl
-                        registers_[machine.rd()] = registers_[machine.rs()] >> machine.rt();
-                    }break;
-                    case  3:
-                    {
-                        //sra
-
-                    }break;
-                    case  4:
-                    {
-                        //sllv
-                    }break;
-                    case  6:
-                    {
-                        //srlv
-                    }break;
-                    case  7:
-                    {
-                        //srav
-                    }break;
-                    case  8:
-                    {
-                        //jr
-                        pc_ = registers_[machine.rs()];
-                    }break;
-                    case  9:
-                    {
-                        //jalr
-                    }break;
-                    case 10:
-                    {
-                        //movz
-                    }break;
-                    case 11:
-                    {
-                        //movn
-                    }break;
-                    case 12:
-                    {
-                        //syscall
-                    }break;
-                    case 13:
-                    {
-                        //break
-                    }break;
-                    case 15:
-                    {
-                        //sync
-                    }break;
-                    case 16:
-                    {
-                        //mfhi
-                        registers_[machine.rd()] = hi_;
-                    }break;
-                    case 18:
-                    {
-                        //mflo
-                        registers_[machine.rd()] = lo_;
-                    }break;
-                    case 24:
-                    {   
-                        //mult
-                        // T-2: LO is undefined
-                        // HI is undefined
-                        // T-1: LO is undefined
-                        // HI is undefined
-                        // T: t ← GPR[rs] * GPR[rt]
-                        // LO ← t31..0 
-                        // HI ← t63..32
-                        u_int64_t temp = registers_[machine.rs()] * registers_[machine.rt()];
-                        u_int32_t hi_temp = temp & 0xFFFF;
-                        u_int32_t lo_temp = (temp >> 16) & 0xFFFF;
-                    }break;
-                    case 25:
-                    {
-                        //multu
-
-                    }break;
-                    case 26:
-                    {
-                        //div
-                        hi_ = registers_[machine.rs()] % registers_[machine.rt()];
-                        registers_[machine.rs()] -= hi_;
-                        lo_ = registers_[machine.rs()] / registers_[machine.rt()]; 
-                    }break;
-                    case 27:
-                    {
-                        //divu
-                        hi_ = registers_[machine.rs()] % registers_[machine.rt()];
-                        registers_[machine.rs()] -= hi_;
-                        lo_ = registers_[machine.rs()] / registers_[machine.rt()];
-                    }break;
-                    case 32:
-                    {
-                        //add or move
-                        registers_[machine.rd()] = registers_[machine.rs()] + registers_[machine.rt()];
-                    }break;
-                    case 33:
-                    {
-                        //addu
-                        registers_[machine.rd()] = registers_[machine.rs()] + registers_[machine.rt()];
-                    }break;
-                    case 34:
-                    {
-                        //sub
-                        registers_[machine.rd()] = registers_[machine.rs()] - registers_[machine.rt()];
-                    }break;
-                    case 35:
-                    {
-                        //subu
-                        registers_[machine.rd()] = registers_[machine.rs()] - registers_[machine.rt()];
-                    }break;
-                    case 36:
-                    {
-                        //and
-                    }break;
-                    case 37:
-                    {
-                        //or
-                    }break;
-                    case 38:
-                    {
-                        //xor
-                    }break;
-                    case 39:
-                    {
-                        //nor
-                    }break;
-                    case 42:
-                    {
-                        //slt
-                    }break;
-                    case 43:
-                    {
-                        //sltu
-                    }break;
-                    case 48:
-                    {
-                        //tge
-                    }break;
-                    case 49:
-                    {
-                        //tgeu
-                    }break;
-                    case 50:
-                    {
-                        //tlt
-                    }break;
-                    case 51:
-                    {
-                        //tltu
-                    }break;
-                    case 52:
-                    {
-                        //teq
-                    }break;
-                    case 54:
-                    {
-                        //tne
-                    }break;
-                    default:
-                    {
-                        std::cout << "function does not exist\n";
-                    }break;
-                }
-            }break;
+                    //mult
+                    // T-2: LO is undefined
+                    // HI is undefined
+                    // T-1: LO is undefined
+                    // HI is undefined
+                    // T: t ← GPR[rs] * GPR[rt]
+                    // LO ← t31..0 
+                    // HI ← t63..32
+                    // uint32_t upperBits = static_cast<uint32_t>(bigValue >> 32);
+                    // uint32_t lowerBits = static_cast<uint32_t>(bigValue & 0xFFFFFFFF);
+                    u_int64_t temp = registers_[machine.rs()] * registers_[machine.rt()];
+                    std::cout << "temp: " << temp << std::endl;
+                    hi_ = temp >> 32;
+                    lo_ = temp & 0xFFFFFFFF;
+                }break;
+                case 25:
+                {
+                    //multu
+                    u_int64_t temp = registers_[machine.rs()] * registers_[machine.rt()];
+                    hi_ = temp >> 32;
+                    lo_ = temp & 0xFFFFFFFF;
+                }break;
+                case 26:
+                {
+                    //div
+                    hi_ = registers_[machine.rs()] % registers_[machine.rt()];
+                    lo_ = registers_[machine.rs()] / registers_[machine.rt()]; 
+                }break;
+                case 27:
+                {
+                    //divu
+                    hi_ = registers_[machine.rs()] % registers_[machine.rt()];
+                    lo_ = registers_[machine.rs()] / registers_[machine.rt()]; 
+                }break;
+                case 32:
+                {
+                    //add or move
+                    registers_[machine.rd()] = registers_[machine.rs()] + registers_[machine.rt()];
+                }break;
+                case 33:
+                {
+                    //addu
+                    registers_[machine.rd()] = registers_[machine.rs()] + registers_[machine.rt()];
+                }break;
+                case 34:
+                {
+                    //sub
+                    registers_[machine.rd()] = registers_[machine.rs()] - registers_[machine.rt()];
+                }break;
+                case 35:
+                {
+                    //subu
+                    registers_[machine.rd()] = registers_[machine.rs()] - registers_[machine.rt()];
+                }break;
+                case 36:
+                {
+                    //and
+                    registers_[machine.rd()] = registers_[machine.rs()] & registers_[machine.rt()];
+                }break;
+                case 37:
+                {
+                    //or
+                    registers_[machine.rd()] = registers_[machine.rs()] | registers_[machine.rt()];
+                }break;
+                case 38:
+                {
+                    //xor
+                }break;
+                case 39:
+                {
+                    //nor
+                }break;
+                case 42:
+                {
+                    //slt
+                }break;
+                case 43:
+                {
+                    //sltu
+                }break;
+                case 48:
+                {
+                    //tge
+                }break;
+                case 49:
+                {
+                    //tgeu
+                }break;
+                case 50:
+                {
+                    //tlt
+                }break;
+                case 51:
+                {
+                    //tltu
+                }break;
+                case 52:
+                {
+                    //teq
+                }break;
+                case 54:
+                {
+                    //tne
+                }break;
+                default:
+                {
+                    std::cout << "function does not exist\n";
+                }break;
+            }
+        }break;
+        case  1:
+        {
+            //li
+            registers_[machine.rt()] = machine.immedite();
+        }break;
         case  2:
-        {}break;
+        {
+            //j
+            // PC=JumpAddr
+            pc_ = machine.immedite();
+        }break;
         case  3:
-        {}break;
+        {
+            //jal
+            registers_[31] = pc_ + 8; 
+            pc_ = machine.immedite();
+        }break;
         case  4:
-        {}break;
+        {
+            //beq
+            if(registers_[machine.rs()]==registers_[machine.rt()])
+                pc_ = pc_ + 4 + machine.immedite();            
+        }break;
         case  5:
-        {}break;
+        {
+            //bne
+
+        }break;
         case  6:
-        {}break;
+        {
+            //blez
+        }break;
         case  7:
-        {}break;
+        {
+            //bgtz
+        }break;
         case  8:
-        {}break;
+        {
+            //addi
+            //  R[rt] = R[rs] + SignExtImm
+            registers_[machine.rt()] = registers_[machine.rs()] + machine.immedite();
+        }break;
         case  9:
-        {}break;
+        {
+            //addiu
+            //  R[rt] = R[rs] + SignExtImm
+            registers_[machine.rt()] = registers_[machine.rs()] + machine.immedite();
+        }break;
         case 10:
-        {}break;
+        {
+            //slti
+        }break;
         case 11:
-        {}break;
+        {
+            //sltiu
+        }break;
         case 12:
-        {}break;
+        {
+            //andi
+        }break;
         case 13:
-        {}break;
+        {
+            //ori
+            //  R[rt] = R[rs] | ZeroExtImm 
+        }break;
         case 14:
-        {}break;
+        {
+            //xori
+        }break;
         case 15:
-        {}break;
+        {
+            //lui
+            registers_[machine.rt()] = machine.immedite();
+        }break;
         case 32:
-        {}break;
+        {
+            //lb
+        }break;
         case 33:
-        {}break;
+        {
+            //lh
+        }break;
         case 34:
-        {}break;
+        {
+            //lwl
+        }break;
         case 35:
-        {}break;
+        {
+            //lw
+        }break;
         case 36:
-        {}break;
+        {
+            //lbu
+        }break;
         case 37:
-        {}break;
+        {
+            //lhu
+        }break;
         case 38:
-        {}break;
+        {
+            //lwr
+        }break;
         case 40:
-        {}break;
+        {
+            //sb
+        }break;
         case 41:
-        {}break;
+        {
+            //sh
+        }break;
         case 42:
-        {}break;
+        {
+            //swl
+        }break;
         case 43:
-        {}break;
+        {
+            //sw
+            // memory[R[rs]+SignExtImm] = R[rt]
+        }break;
         case 46:
-        {}break;
+        {
+            //swr
+        }break;
         case 47:
-        {}break;
+        {
+            //cache
+        }break;
         case 48:
-        {}break;
+        {
+            //ll
+        }break;
         case 49:
-        {}break;
+        {
+            //lwc1
+        }break;
         case 50:
-        {}break;
+        {
+            //lwc2
+        }break;
         case 51:
-        {}break;
+        {
+            //pref
+        }break;
         case 53:
-        {}break;
+        {
+            //ldc1
+        }break;
         case 54:
-        {}break;
+        {
+            //ldc2
+        }break;
         case 56:
-        {}break;
+        {
+            //sc
+        }break;
         case 57:
-        {}break;
+        {
+            //swc1
+        }break;
         case 58:
-        {}break;
+        {
+            //swc2
+        }break;
         case 61:
-        {}break;
+        {
+            //sdc1
+        }break;
         case 62:
-        {}break;
+        {
+            //sdc2
+        }break;
         default:
         {
             std::cout << "operation does not exist\n";

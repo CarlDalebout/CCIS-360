@@ -39,8 +39,8 @@ public:
     uint8_t  & rd()             { return rd_; }
     uint8_t    rd()       const { return rd_; }
     
-    uint16_t & immedite()       { return immediate_; }
-    uint16_t   immedite() const { return immediate_; }
+    uint32_t & immedite()       { return immediate_; }
+    uint32_t   immedite() const { return immediate_; }
     
     uint8_t  & shamt()          { return shamt_; }
     uint8_t    shamt()    const { return shamt_; }
@@ -52,7 +52,6 @@ public:
     bool       mcode()    const { return print_mcode_;}
 
     uint8_t  reg_to_index(std::string);
-    
     uint32_t get_machine_code(std::vector<std::string> &);
 
 private:
@@ -60,7 +59,7 @@ private:
     uint8_t  rs_;
     uint8_t  rt_;
     uint8_t  rd_;
-    uint16_t immediate_;
+    uint32_t immediate_;
     uint8_t  shamt_;
     uint8_t  funct_;
     int      format_;
