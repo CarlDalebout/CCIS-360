@@ -118,7 +118,7 @@ std::string  word_to_hex(uint32_t value, int spaces)
         std::string ret = "";
         for (int i = 0; i < spaces; ++i)
         {
-            if(i %3 == 0 && i != 0)
+            if(i % 2 == 0 && i != 0)
                 ret += ' ';
             ret += '0';
         }
@@ -211,14 +211,14 @@ std::string  word_to_hex(uint32_t value, int spaces)
         if(i <= stack_temp.size())
         {
             // std::cout << "pushing " << stack_temp.top() << "to ret: " << ret << std::endl;
-            if(i %3 == 0 && i != 0)
+            if(i %2 == 0 && i != 0)
                 ret += ' ';
             ret += stack_temp.top();
             stack_temp.pop();
         }
         else
         {
-            if(i %3 == 0 && i != 0)
+            if(i %2 == 0 && i != 0)
                 ret += ' ';
             ret += '0';
         }
@@ -227,6 +227,7 @@ std::string  word_to_hex(uint32_t value, int spaces)
     return ret;
 }
 
+//NEED TO WORK ON
 std::string word_to_char(uint32_t value, int spaces)
 {
     if(value == 0)
@@ -244,16 +245,54 @@ std::string word_to_char(uint32_t value, int spaces)
     return ret;
 }
 
-void Memory::push_label(std::string key, uint32_t pc)
+std::string string_to_hex(std::string value)
 {
-    std::cout << "pushing " << key << ' ' << pc << " to lables map\n";
-    lables_.insert({key, pc});
+    std::string ret;
+    for(int i = 0; i < value.size(); ++i)
+    {
+        uint32_t temp = value[i];
+        ret += addr_to_hex(temp, 2);
+    }
+    return ret;
+}
+
+void Memory::push_label(std::string key, uint32_t address)
+{
+    key.pop_back();
+    std::cout << "pushing " << key << " 0x" << addr_to_hex(address, 8) << " to lables map\n";
+    lables_.insert({key, address});
 }
 
 
-void Memory::push_data(std::string tokens)
+void Memory::push_data(std::vector<std::string> & tokens)
 {
+    if(tokens[0] == ".asciiz")
+    {
+        std::string data_value_char;
+        while(!tokens[1].empty())
+        {
+            if (tokens[1].size() >= 4)
+            {
+                data_value_char = tokens[1].substr(0, 4);
+                tokens[1].erase(0, 4);
+            }
+            else
+            {
+                data_value_char = tokens[1].substr(*tokens[1].begin() - tokens[1][0]);
+                tokens[1].erase();
+            }
 
+            std::string value = string_to_hex(data_value_char);
+            std::cout << "hex code is " << value << std::endl;
+            std::vector<unsigned int> segment = {data_it_, (unsigned)stoi(value, 0, 16)};
+            data_.push_back(segment);
+        }   
+    }
+}
+
+void Memory::push_stack(std::vector<std::string> & tokens)
+{
+    
 }
 
 void Memory::print_data()
@@ -265,11 +304,11 @@ void Memory::print_data()
             << "-------------+-------------+-------------+-------------+-------------\n";
     for(int i = 0; i < data_.size(); ++i)
     {
-       std::cout << "  "    << data_[i][0]  
-                 << "|    " << addr_to_hex(data_[i][0], 8)
-                 << "|  "   << data_[i][1]
-                 << "|  "   << word_to_hex(data_[i][1], 8)
-                 << "|  "   << word_to_char(data_[i][1], 7)
+       std::cout << " "      << std::setw(12) << std::right << data_[i][0]  
+                 << "|     " << std::setw(8) << std::right << addr_to_hex(data_[i][0], 8)
+                 << "|  "    << std::setw(11) << std::right << data_[i][1]
+                 << "| "    << std::setw(11) << std::right << word_to_hex(data_[i][1], 8)
+                 << "|  "    << std::setw(11) << std::right << word_to_char(data_[i][1], 7)
                  << std::endl;
     }
     std::cout << std::endl <<std::endl;
@@ -290,6 +329,21 @@ void Memory::print_stack()
                  << "|  "   << data_[i][1]
                  << "|  "   << word_to_hex(stack_[i], 8)
                  << "|  "   << word_to_char(stack_[i], 7)
+                 << std::endl;
+    }
+    std::cout << std::endl <<std::endl;
+}
+
+void Memory::print_label()
+{
+    uint32_t temp = sp_;
+    std::cout << "\n=====================================================================\n"
+          << "Labels\n"
+          << "=====================================================================\n";
+    for(auto it = lables_.begin(); it != lables_.end(); it++)
+    {
+       std::cout << "   " << std::setw(9) << std::right <<(it->second)
+                 << "|  " << std::setw(8) << std::right << (it ->first)
                  << std::endl;
     }
     std::cout << std::endl <<std::endl;

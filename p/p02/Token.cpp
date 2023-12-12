@@ -20,7 +20,22 @@ Token::Token(std::string input, std::string separators)
     while(input[i] != '\0')
     {
         char ch = input[i];
-        if(found(ch, separators))
+        if(ch == '"')
+        {   
+            i++;
+            ch = input[i];
+            while(input[i] != '"')
+            {
+                ch = input[i];
+                token += ch;
+                i++;
+            }
+            std::cout << "pushing " << token << " to tokens\n";
+            tokens_.push_back(token);
+            token = "";
+            i++;
+        }
+        else if(found(ch, separators))
         {   
             if(token != "")
             {

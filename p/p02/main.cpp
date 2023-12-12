@@ -158,6 +158,10 @@ bool check_at_functions(std::vector<std::string> tokens)
             {
                 memory.print_stack();
             }
+            else if(tokens[1] == "labels" || tokens[1] == "label")
+            {
+                memory.print_label();
+            }
             else if(tokens[1] == "mcode")
             {
                 if(tokens[2] == "true")
@@ -186,15 +190,23 @@ bool check_at_functions(std::vector<std::string> tokens)
         }
         else if( tokens[0] == "@text")
         {
+            std::cout << std::endl;
             mode = 0;
         }
         else if( tokens[0] == "@data")
         {
-            
+            std::cout << std::endl;
+            std::cout << "=====================================================================\n"
+            << "DATA SEGMENT\n"
+            << "=====================================================================\n";
             mode = 1;
         }   
         else if( tokens[0] == "@labels")
         {   
+            std::cout << "\n=====================================================================\n"
+            << "Lables SEGMENT\n"
+            << "=====================================================================\n";
+            std::cout << std::endl;
             mode = 2;
         }
         else
@@ -212,11 +224,11 @@ bool check_at_functions(std::vector<std::string> tokens)
     return false;
 }
 
-bool check_for_labal(std::vector<std::string> tokens, Register reg)
+bool check_for_labal(std::vector<std::string> tokens, int address)
 {
     if(tokens[0][tokens[0].size()-1] == ':')
     {
-        memory.push_label(tokens[0], reg.pc());
+        memory.push_label(tokens[0], address);
         return true;
     }
     return false;
@@ -237,7 +249,6 @@ int main()
             case 0: //text mode
             {
                 std::cout << "TEXT: " << to_hex(reg.pc()) << "> "; 
-
                 getline(std::cin, user_input);
                 if(user_input == "")
                     continue;
@@ -249,7 +260,7 @@ int main()
                     continue;
                 }
                 
-                if(check_for_labal(tok.tokens(), reg))
+                if(check_for_labal(tok.tokens(), reg.pc()))
                 {
                     tok.pop_front();
                 }
@@ -273,6 +284,7 @@ int main()
             } break;
             case 1: //data mode
             {
+                std::cout << "Data: " << to_hex(memory.data_it()) << "> "; 
                 getline(std::cin, user_input);
                 if(user_input == "")
                     continue;
@@ -284,7 +296,7 @@ int main()
                     continue;
                 }
 
-                if(check_for_labal(tok.tokens(), reg))
+                if(check_for_labal(tok.tokens(), memory.data_it()))
                 {
                     tok.pop_front();
                 }
@@ -293,6 +305,8 @@ int main()
                 {
                     continue;
                 }
+                memory.push_data(tok.tokens());
+                tok.clear();
             }break;
             case 2: //labels mode
             {
