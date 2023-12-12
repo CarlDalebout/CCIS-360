@@ -3,12 +3,16 @@
 #include <string>
 #include <map>
 #include <stack>
-#include "Register.h"
 #include "Machine.h"
+#include "Memory.h"
+#include "Register.h"
 #include "Token.h"
 
 Register reg;
 Machine  machine;
+Memory   memory;
+int mode = 0; // text_mode = 1, data_mode = 1, lables_mode = 2
+bool reg_print = 0;
 
 void printbits(uint32_t b)
 {
@@ -124,11 +128,35 @@ bool check_at_functions(std::vector<std::string> tokens)
         {
             if(tokens[1] == "reg")
             {
-                reg.print();
+                if(tokens.size() > 3)
+                {
+                    if (tokens[3] == "const" && tokens[4] == "true")
+                        reg_print = true;
+                    else if(tokens[3] == "const" && tokens[4] == "false")
+                        reg_print = false;
+                    else
+                    {
+                        std::cout << "invalid command { ";
+                        std::string dir = ""; 
+                        for(long unsigned int i = 0; i < tokens.size(); ++i) 
+                        {
+                            std::cout << dir << tokens[i]; dir = " ";
+                        }
+                        std::cout << "}\n"; 
+                    }
+                }
+                else
+                {
+                    reg.print();
+                }
             }
             else if(tokens[1] == "data")
             {
-                //stack.print()
+                memory.print_data();
+            }
+            else if(tokens[1] == "stack")
+            {
+                memory.print_stack();
             }
             else if(tokens[1] == "mcode")
             {
@@ -156,6 +184,19 @@ bool check_at_functions(std::vector<std::string> tokens)
                 }
             }
         }
+        else if( tokens[0] == "@text")
+        {
+            mode = 0;
+        }
+        else if( tokens[0] == "@data")
+        {
+            
+            mode = 1;
+        }   
+        else if( tokens[0] == "@labels")
+        {   
+            mode = 2;
+        }
         else
         {
             std::cout << "Error at code {";
@@ -171,6 +212,16 @@ bool check_at_functions(std::vector<std::string> tokens)
     return false;
 }
 
+bool check_for_labal(std::vector<std::string> tokens, Register reg)
+{
+    if(tokens[0][tokens[0].size()-1] == ':')
+    {
+        memory.push_label(tokens[0], reg.pc());
+        return true;
+    }
+    return false;
+}
+
 int main()
 {
     std::string user_input;
@@ -181,26 +232,92 @@ int main()
     reg.pc() = 4194304;
     while(running)
     {
-        std::cout << "TEXT: " << to_hex(reg.pc()) << "> "; 
+        switch (mode)
+        { 
+            case 0: //text mode
+            {
+                std::cout << "TEXT: " << to_hex(reg.pc()) << "> "; 
 
-        getline(std::cin, user_input);
-        if(user_input == "")
-            continue;
-        tok.push_back(user_input);
-        
-        if(check_at_functions(tok.tokens()))
-        {
-            tok.clear();
-            continue;
+                getline(std::cin, user_input);
+                if(user_input == "")
+                    continue;
+                tok.push_back(user_input);
+                
+                if(check_at_functions(tok.tokens()))
+                {
+                    tok.clear();
+                    continue;
+                }
+                
+                if(check_for_labal(tok.tokens(), reg))
+                {
+                    tok.pop_front();
+                }
+
+                if(tok.size() == 0)
+                {
+                    continue;
+                }
+                
+                machine.get_machine_code(tok.tokens());
+                reg.update(machine);
+                
+                if(reg_print)
+                {
+                    std::cout << "\nreg_print = true";
+                    reg.print();
+                }
+                tok.clear();
+                reg.pc() += 4;
+                // printbits(mcode);
+            } break;
+            case 1: //data mode
+            {
+                getline(std::cin, user_input);
+                if(user_input == "")
+                    continue;
+                tok.push_back(user_input);
+
+                if(check_at_functions(tok.tokens()))
+                {
+                    tok.clear();
+                    continue;
+                }
+
+                if(check_for_labal(tok.tokens(), reg))
+                {
+                    tok.pop_front();
+                }
+
+                if(tok.size() == 0)
+                {
+                    continue;
+                }
+            }break;
+            case 2: //labels mode
+            {
+                getline(std::cin, user_input);
+                if(user_input == "")
+                    continue;
+                tok.push_back(user_input);
+
+                if(check_at_functions(tok.tokens()))
+                {
+                    tok.clear();
+                    continue;
+                }
+
+                if(tok.size() == 0)
+                {
+                    continue;
+                }
+
+            }break;
+            default:
+            {
+                std::cout << "!!!error mode is not in valid state !!\n";
+            }break;
         }
-        
-        if(tok[0] == "move")
-            tok.push_back("$0");
-        machine.get_machine_code(tok.tokens());
-        reg.update(machine);
-        tok.clear();
-        reg.pc() += 4;
-        // printbits(mcode);
     }
     return 0;
 }

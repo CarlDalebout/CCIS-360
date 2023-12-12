@@ -26,7 +26,17 @@ public:
     Machine()
     :print_mcode_(false)
     {}
+
+/*==========================================================================================
+Functions
+==========================================================================================*/
+    uint8_t    reg_to_index(std::string);
+    uint32_t   get_machine_code(std::vector<std::string> &);
     
+
+/*==========================================================================================
+Sets and Gets
+==========================================================================================*/
     uint8_t  & opcode()         { return opcode_; }
     uint8_t    opcode()   const { return opcode_; }
 
@@ -49,10 +59,7 @@ public:
     uint8_t    funct()    const { return funct_; }
 
     bool     & mcode()          { return print_mcode_;}
-    bool       mcode()    const { return print_mcode_;}
-
-    uint8_t  reg_to_index(std::string);
-    uint32_t get_machine_code(std::vector<std::string> &);
+    bool       mcode()    const { return print_mcode_;}   
 
 private:
     uint8_t  opcode_;

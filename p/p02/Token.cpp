@@ -64,7 +64,8 @@ void Token::clear()
 std::string Token::pop_front()
 {
     std::string ret = tokens_[0];
-    tokens_.erase(tokens_.begin(), tokens_.begin()+1);
+    if(!tokens_.empty())
+        tokens_.erase(tokens_.begin());
     return ret;
 }
 

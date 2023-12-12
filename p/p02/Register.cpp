@@ -94,7 +94,7 @@ std::string to_hex(int value, int spaces)
         // std::cout << "value/16: " << value << '\n';
     }
     std::string ret;
-    
+
     int i = spaces;
     while(i != 0)
     {
@@ -255,14 +255,17 @@ void Register::update(Machine & machine)
                 case  4:
                 {
                     //sllv
+                    registers_[machine.rd()] = registers_[machine.rt()] << registers_[machine.rs()];
                 }break;
                 case  6:
                 {
                     //srlv
+                    registers_[machine.rd()] = registers_[machine.rt()] >> registers_[machine.rs()];
                 }break;
                 case  7:
                 {
                     //srav
+                    registers_[machine.rd()] = registers_[machine.rt()] >> registers_[machine.rs()];
                 }break;
                 case  8:
                 {
@@ -272,14 +275,20 @@ void Register::update(Machine & machine)
                 case  9:
                 {
                     //jalr
+                    registers_[machine.rd()] = registers_[31];
+                    pc_ = registers_[machine.rs()];
                 }break;
                 case 10:
                 {
                     //movz
+                    if (registers_[machine.rt()] == 0) 
+                        registers_[machine.rd()] = registers_[machine.rs()];
                 }break;
                 case 11:
                 {
                     //movn
+                    if (registers_[machine.rt()] != 0) 
+                        registers_[machine.rd()] = registers_[machine.rs()];
                 }break;
                 case 12:
                 {
@@ -307,17 +316,7 @@ void Register::update(Machine & machine)
                 case 24:
                 {   
                     //mult
-                    // T-2: LO is undefined
-                    // HI is undefined
-                    // T-1: LO is undefined
-                    // HI is undefined
-                    // T: t ← GPR[rs] * GPR[rt]
-                    // LO ← t31..0 
-                    // HI ← t63..32
-                    // uint32_t upperBits = static_cast<uint32_t>(bigValue >> 32);
-                    // uint32_t lowerBits = static_cast<uint32_t>(bigValue & 0xFFFFFFFF);
                     u_int64_t temp = registers_[machine.rs()] * registers_[machine.rt()];
-                    std::cout << "temp: " << temp << std::endl;
                     hi_ = temp >> 32;
                     lo_ = temp & 0xFFFFFFFF;
                 }break;
@@ -373,42 +372,56 @@ void Register::update(Machine & machine)
                 case 38:
                 {
                     //xor
+                    registers_[machine.rd()] = registers_[machine.rs()] ^ registers_[machine.rt()];
                 }break;
                 case 39:
                 {
                     //nor
+                    registers_[machine.rd()] = !(registers_[machine.rs()] | registers_[machine.rt()]);
                 }break;
                 case 42:
                 {
                     //slt
+                    registers_[machine.rd()] = (registers_[machine.rs()] < registers_[machine.rt()]) ? 1 : 0; 
                 }break;
                 case 43:
                 {
                     //sltu
+                    registers_[machine.rd()] = (registers_[machine.rs()] < registers_[machine.rt()]) ? 1 : 0; 
                 }break;
                 case 48:
                 {
                     //tge
+                    registers_[machine.rd()] = (registers_[machine.rs()] > registers_[machine.rt()]) ? 1 : 0; 
                 }break;
                 case 49:
                 {
                     //tgeu
+                    registers_[machine.rd()] = (registers_[machine.rs()] > registers_[machine.rt()]) ? 1 : 0; 
                 }break;
                 case 50:
                 {
                     //tlt
+                    if(registers_[machine.rs()] < registers_[machine.rt()]) 
+                        std::cout << "stop its a trap\n";
                 }break;
                 case 51:
                 {
                     //tltu
+                    if(registers_[machine.rs()] < registers_[machine.rt()]) 
+                        std::cout << "stop its a trap\n";
                 }break;
                 case 52:
                 {
                     //teq
+                    if(registers_[machine.rs()] == registers_[machine.rt()]) 
+                        std::cout << "stop its a trap\n";
                 }break;
                 case 54:
                 {
                     //tne
+                    if(registers_[machine.rs()] != registers_[machine.rt()]) 
+                        std::cout << "stop its a trap\n";
                 }break;
                 default:
                 {
@@ -424,7 +437,6 @@ void Register::update(Machine & machine)
         case  2:
         {
             //j
-            // PC=JumpAddr
             pc_ = machine.immedite();
         }break;
         case  3:
@@ -436,21 +448,27 @@ void Register::update(Machine & machine)
         case  4:
         {
             //beq
-            if(registers_[machine.rs()]==registers_[machine.rt()])
+            if(registers_[machine.rs()] == registers_[machine.rt()])
                 pc_ = pc_ + 4 + machine.immedite();            
         }break;
         case  5:
         {
             //bne
+            if(registers_[machine.rs()] != registers_[machine.rt()])
+                pc_ = pc_ + 4 + machine.immedite();            
 
         }break;
         case  6:
         {
             //blez
+            if(registers_[machine.rs()] <= 0)
+                pc_ = pc_ + 4 + machine.immedite();            
         }break;
         case  7:
         {
             //bgtz
+            if(registers_[machine.rs()] > 0)
+                pc_ = pc_ + 4 + machine.immedite();            
         }break;
         case  8:
         {
@@ -467,23 +485,27 @@ void Register::update(Machine & machine)
         case 10:
         {
             //slti
+            registers_[machine.rt()] = (registers_[machine.rs()] < machine.immedite()) ? 1 : 0;
         }break;
         case 11:
         {
             //sltiu
+            registers_[machine.rt()] = (registers_[machine.rs()] < machine.immedite()) ? 1 : 0;
         }break;
         case 12:
         {
             //andi
+            registers_[machine.rt()] = registers_[machine.rs()] & machine.immedite();
         }break;
         case 13:
         {
             //ori
-            //  R[rt] = R[rs] | ZeroExtImm 
+            registers_[machine.rt()] = registers_[machine.rs()] | machine.immedite();
         }break;
         case 14:
         {
             //xori
+            registers_[machine.rt()] = registers_[machine.rs()] ^ machine.immedite();
         }break;
         case 15:
         {
@@ -493,42 +515,52 @@ void Register::update(Machine & machine)
         case 32:
         {
             //lb
+            // rt ← memory[base+offset]
         }break;
         case 33:
         {
             //lh
+            // rt ← memory[base+offset]
         }break;
         case 34:
         {
             //lwl
+            // rt ← rt MERGE memory[base+offset]
         }break;
         case 35:
         {
             //lw
+            // rt ← memory[base+offset]
         }break;
         case 36:
         {
             //lbu
+            // rt ← memory[base+offset]
         }break;
         case 37:
         {
             //lhu
+            // rt ← memory[base+offset
         }break;
         case 38:
         {
             //lwr
+            // rt ← rt MERGE memory[base+offset]
         }break;
         case 40:
         {
             //sb
+            // memory[base+offset] ← rt
         }break;
         case 41:
         {
             //sh
+            // memory[base+offset] ← rt
         }break;
         case 42:
         {
             //swl
+            // rt MERGE memory[base+offset] ← rt 
         }break;
         case 43:
         {
@@ -538,6 +570,7 @@ void Register::update(Machine & machine)
         case 46:
         {
             //swr
+            // rt MERGE memory[base+offset] ← rt 
         }break;
         case 47:
         {
@@ -546,10 +579,12 @@ void Register::update(Machine & machine)
         case 48:
         {
             //ll
+            // rt ← memory[base+offset]
         }break;
         case 49:
         {
             //lwc1
+            // ft ← memory[base+offset]
         }break;
         case 50:
         {

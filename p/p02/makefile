@@ -9,6 +9,7 @@ LINK      = g++
 OBJS      = Register.o 	\
 			Token.o		\
 			Machine.o	\
+			Memory.o	\
 			main.o
 EXE 		= main.exe
 
@@ -52,6 +53,9 @@ Token.o: Token.h Token.cpp
 
 Machine.o: Machine.h Machine.cpp
 	$(CXX) Machine.cpp -c -o Machine.o
+
+Memory.o: Memory.h Memory.cpp
+	$(CXX) Memory.cpp -c -o Memory.o
 
 #------------------------------------------------------------------------------
 # Utilities

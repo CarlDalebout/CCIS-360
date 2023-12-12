@@ -1,59 +1,7 @@
 #include "Machine.h"
 #include <cmath>
 
-void printbits(uint32_t b, int format)
-{
-    switch (format)
-    {
-        case 0:
-        {
-            for(int i = 31; i >= 26; --i)
-            {
-                std::cout << ((b >> i) & 1);
-            }
-            for(int i = 25; i >=6; --i)
-            {
-                if(i % 5 == 0)
-                    std::cout << ' ';
-                std::cout << ((b >> i) & 1);
-            }
-            std::cout << ' ';
-            for(int i = 5; i >= 0;  --i)
-            {
-                std::cout << ((b >> i) & 1);
-            }
-            std::cout << std::endl;
-        }   break;
-        case 1:
-        {
-            for(int i = 31; i >= 26; --i)
-            {
-                std::cout << ((b >> i) & 1);
-            }
-            for(int i = 25; i >=16; --i)
-            {
-                if(i % 5 == 0)
-                    std::cout << ' ';
-                std::cout << ((b >> i) & 1);
-            }
-            std::cout << ' ';
-            for(int i = 15; i >= 0;  --i)
-            {
-                std::cout << ((b >> i) & 1);
-            }
-            std::cout << std::endl;
-        }   break;
-        default:
-        {
-            for(int i = format-1; i >= 0; --i)
-            {
-                std::cout << ((b >> i) & 1);
-            }
-        }break;
-    }
-}
-
-Machine::Functions_Op Machine::functions_op_ = 
+         Machine::Functions_Op Machine::functions_op_ = 
 {
     {"sll",     off( 0,  0, 0)}, 
     {"li",      off( 1,  0, 3)}, // added for testing
@@ -132,6 +80,58 @@ Machine::Functions_Op Machine::functions_op_ =
     {"sdc2",    off(62,  0, 1)}  
 };
 
+void              printbits(uint32_t b, int format)
+{
+    switch (format)
+    {
+        case 0:
+        {
+            for(int i = 31; i >= 26; --i)
+            {
+                std::cout << ((b >> i) & 1);
+            }
+            for(int i = 25; i >=6; --i)
+            {
+                if(i % 5 == 0)
+                    std::cout << ' ';
+                std::cout << ((b >> i) & 1);
+            }
+            std::cout << ' ';
+            for(int i = 5; i >= 0;  --i)
+            {
+                std::cout << ((b >> i) & 1);
+            }
+            std::cout << std::endl;
+        }   break;
+        case 1:
+        {
+            for(int i = 31; i >= 26; --i)
+            {
+                std::cout << ((b >> i) & 1);
+            }
+            for(int i = 25; i >=16; --i)
+            {
+                if(i % 5 == 0)
+                    std::cout << ' ';
+                std::cout << ((b >> i) & 1);
+            }
+            std::cout << ' ';
+            for(int i = 15; i >= 0;  --i)
+            {
+                std::cout << ((b >> i) & 1);
+            }
+            std::cout << std::endl;
+        }   break;
+        default:
+        {
+            for(int i = format-1; i >= 0; --i)
+            {
+                std::cout << ((b >> i) & 1);
+            }
+        }break;
+    }
+}
+
 uint8_t  Machine::reg_to_index(std::string tok)
 {   
     if(tok == "zero")
@@ -186,16 +186,18 @@ uint8_t  Machine::reg_to_index(std::string tok)
 
 uint32_t Machine::get_machine_code(std::vector<std::string> & tokens)
 {
-    
-    std::map<std::string, off>::iterator it;
-    it = functions_op_.find(tokens[0]);
+    if(tokens[0] == "move")
+            tokens.push_back("$0");
+
+    std::map<std::string, off>::iterator it_off;
+    it_off = functions_op_.find(tokens[0]);
 
     uint32_t mcode;
-    if(it != functions_op_.end())
+    if(it_off != functions_op_.end())
     {
-        opcode_ = it->second.opcode_;
-        funct_  = it->second.funct_;
-        format_ = it->second.format_;
+        opcode_ = it_off->second.opcode_;
+        funct_  = it_off->second.funct_;
+        format_ = it_off->second.format_;
         
         // std::cout << "format_: " << (int)format_ << " bits: ";
         // printbits(format_, 5);
@@ -287,7 +289,7 @@ uint32_t Machine::get_machine_code(std::vector<std::string> & tokens)
             }break;
             case 2:
             {
-                // immediate_ = 
+               // need to do
             }break;
             case 3:
             {
