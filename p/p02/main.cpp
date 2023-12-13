@@ -11,7 +11,7 @@
 Register reg;
 Machine  machine;
 Memory   memory;
-int mode = 0; // text_mode = 1, data_mode = 1, lables_mode = 2
+int mode = 0; // text_mode = 1, data_mode = 1
 bool reg_print = 0;
 
 void printbits(uint32_t b)
@@ -150,7 +150,7 @@ bool check_at_functions(std::vector<std::string> tokens)
                     reg.print();
                 }
             }
-            else if(tokens[1] == "data")
+            else if(tokens[1] == "data" || tokens[1] == "Data")
             {
                 memory.print_data();
             }
@@ -164,17 +164,16 @@ bool check_at_functions(std::vector<std::string> tokens)
             }
             else if(tokens[1] == "mcode")
             {
-                if(tokens[2] == "true")
+                if(tokens.size() == 2)
                 {
-                    std::cout << "\nprinting machine code\n\n";
-                    machine.mcode() = true;
-                    // std::cout << machine.mcode() << std::endl;
+                    machine.print_bits(machine.mcode(), machine.format());
                 }
-                else if(tokens[2] == "false")
+                else if(tokens.size() > 2)
                 {
-                    std::cout << "\nnot printing machine code\n\n";
-                    machine.mcode() = false;
-                    // std::cout << machine.mcode() << std::endl;
+                    if(tokens[2] == "const" && tokens[3] == "true")
+                        machine.print_mcode() = true;
+                    else if(tokens[2] == "const" && tokens[3] == "false")
+                        machine.print_mcode() = false;
                 }
                 else
                 {
@@ -201,14 +200,6 @@ bool check_at_functions(std::vector<std::string> tokens)
             << "=====================================================================\n";
             mode = 1;
         }   
-        else if( tokens[0] == "@labels")
-        {   
-            std::cout << "\n=====================================================================\n"
-            << "Lables SEGMENT\n"
-            << "=====================================================================\n";
-            std::cout << std::endl;
-            mode = 2;
-        }
         else
         {
             std::cout << "Error at code {";
@@ -219,6 +210,21 @@ bool check_at_functions(std::vector<std::string> tokens)
             }
             std::cout << "} does not exist\n";
         }
+        return true;
+    }
+    else if(tokens[0] == ".text")
+    {
+        std::cout << std::endl;
+            mode = 0;
+        return true;
+    }
+    else if(tokens[0] == ".data")
+    {
+        std::cout << std::endl;
+           std::cout << "=====================================================================\n"
+           << "DATA SEGMENT\n"
+           << "=====================================================================\n";
+           mode = 1;
         return true;
     }
     return false;
@@ -270,7 +276,12 @@ int main()
                     continue;
                 }
                 
-                machine.get_machine_code(tok.tokens(), memory);
+                if(machine.get_machine_code(tok.tokens(), memory) == 0)
+                {
+                    tok.clear();
+                    continue;
+                }
+                
                 reg.update(machine, memory);
                 
                 if(reg_print)
@@ -307,25 +318,6 @@ int main()
                 }
                 memory.push_data(tok.tokens());
                 tok.clear();
-            }break;
-            case 2: //labels mode
-            {
-                getline(std::cin, user_input);
-                if(user_input == "")
-                    continue;
-                tok.push_back(user_input);
-
-                if(check_at_functions(tok.tokens()))
-                {
-                    tok.clear();
-                    continue;
-                }
-
-                if(tok.size() == 0)
-                {
-                    continue;
-                }
-
             }break;
             default:
             {

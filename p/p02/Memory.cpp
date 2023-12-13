@@ -241,6 +241,13 @@ std::string word_to_char(uint32_t value, int spaces)
         }
         return ret;
     }
+    std::string temp = addr_to_hex(value, 8);
+    while(!temp.empty())
+    {
+        std::string sub_temp = temp.substr(0, 2);
+        temp.erase(0, 2);
+        std::cout << ' ' << (char)stoi(sub_temp, 0 , 16);
+    }
     std::string ret;
     return ret;
 }
@@ -267,14 +274,12 @@ uint32_t Memory::get_address(std::string key)
     return 0; 
 }
 
-
 void Memory::push_label(std::string key, uint32_t address)
 {
     key.pop_back();
     std::cout << "pushing " << key << " 0x" << addr_to_hex(address, 8) << " to lables map\n";
     lables_.insert({key, address});
 }
-
 
 void Memory::push_data(std::vector<std::string> & tokens)
 {
@@ -295,9 +300,10 @@ void Memory::push_data(std::vector<std::string> & tokens)
             }
 
             std::string value = string_to_hex(data_value_char);
-            std::cout << "hex code is " << value << std::endl;
+            // std::cout << "hex code is " << value << std::endl;
             std::vector<unsigned int> segment = {data_it_, (unsigned)stoi(value, 0, 16)};
             data_.push_back(segment);
+            data_it_ += 4;
         }   
     }
 }
@@ -320,7 +326,7 @@ void Memory::print_data()
                  << "|     " << std::setw(8) << std::right << addr_to_hex(data_[i][0], 8)
                  << "|  "    << std::setw(11) << std::right << data_[i][1]
                  << "| "    << std::setw(11) << std::right << word_to_hex(data_[i][1], 8)
-                 << "|  "    << std::setw(11) << std::right << word_to_char(data_[i][1], 7)
+                 << "|  "    << std::setw(2) << std::right << word_to_char(data_[i][1], 7)
                  << std::endl;
     }
     std::cout << std::endl <<std::endl;

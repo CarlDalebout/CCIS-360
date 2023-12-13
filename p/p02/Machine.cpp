@@ -81,7 +81,7 @@
     {"sdc2",    off(62,  0, 1)}  
 };
 
-void              printbits(uint32_t b, int format)
+void  Machine::print_bits(uint32_t b, int format)
 {
     switch (format)
     {
@@ -188,7 +188,7 @@ uint8_t  Machine::reg_to_index(std::string tok)
 uint32_t Machine::get_machine_code(std::vector<std::string> & tokens, Memory & memory)
 {
     if(tokens[0] == "move")
-            tokens.push_back("$0");
+            tokens.push_back("zero");
 
     std::map<std::string, off>::iterator it_off;
     it_off = functions_op_.find(tokens[0]);
@@ -201,7 +201,7 @@ uint32_t Machine::get_machine_code(std::vector<std::string> & tokens, Memory & m
         format_ = it_off->second.format_;
         
         // std::cout << "format_: " << (int)format_ << " bits: ";
-        // printbits(format_, 5);
+        // print_bits(format_, 5);
         // std::cout << std::endl;
         
         switch ((int)format_)
@@ -236,22 +236,22 @@ uint32_t Machine::get_machine_code(std::vector<std::string> & tokens, Memory & m
                 if(print_mcode_ == true)
                 {
                     std::cout << "opcode_: " << (int)opcode_ << " bits: ";
-                    printbits(opcode_, 6);
+                    print_bits(opcode_, 6);
 
-                    std::cout << ", rd_: $" << tokens[1] << "($" << (int)rd_ << ") bits: ";
-                    printbits(rd_, 5);
+                    std::cout << "\nrd_: $" << tokens[1] << "($" << (int)rd_ << ") bits: ";
+                    print_bits(rd_, 5);
                     
-                    std::cout << ", rs_: $" << tokens[2] << "($" << (int)rs_ << ") bits: ";
-                    printbits(rs_, 5);
+                    std::cout << "\nrs_: $" << tokens[2] << "($" << (int)rs_ << ") bits: ";
+                    print_bits(rs_, 5);
                     
-                    std::cout << ", rt_: $" << tokens[3] << "($" << (int)rt_ << ") bits: ";
-                    printbits(rt_, 5);
+                    std::cout << "\nrt_: $" << tokens[3] << "($" << (int)rt_ << ") bits: ";
+                    print_bits(rt_, 5);
                     
-                    std::cout << ", shamt_: " << (int)shamt_ << " bits: ";
-                    printbits(shamt_, 5);
+                    std::cout << "\nshamt_: " << (int)shamt_ << " bits: ";
+                    print_bits(shamt_, 5);
 
-                    std::cout << ", funct_: " << (int)funct_ << " bits: ";
-                    printbits(funct_, 6);
+                    std::cout << "\nfunct_: " << (int)funct_ << " bits: ";
+                    print_bits(funct_, 6);
 
                     std::cout << std::endl;
                 }    
@@ -270,16 +270,16 @@ uint32_t Machine::get_machine_code(std::vector<std::string> & tokens, Memory & m
                 if(print_mcode_ == true)
                 {
                     std::cout << "opcode_: " << (int)opcode_ << " bits: ";
-                    printbits(opcode_, 8);
+                    print_bits(opcode_, 6);
 
-                    std::cout << ", rs_: $" << (int)rs_ << " bits: ";
-                    printbits(rs_, 8);
+                    std::cout << "\nrs_: $" << (int)rs_ << " bits: ";
+                    print_bits(rs_, 5);
                     
-                    std::cout << ", rt_: $" << (int)rt_ << " bits: ";
-                    printbits(rt_, 8);
+                    std::cout << "\nrt_: $" << (int)rt_ << " bits: ";
+                    print_bits(rt_, 5);
 
-                    std::cout << ", immediate" << (int)immediate_ << " bits: ";
-                    printbits(immediate_, 16);
+                    std::cout << "\nimmediate" << (int)immediate_ << " bits: ";
+                    print_bits(immediate_, 16);
 
                     std::cout << std::endl;
                 }
@@ -303,17 +303,18 @@ uint32_t Machine::get_machine_code(std::vector<std::string> & tokens, Memory & m
                         immediate_ = stoi(tokens[2]);
                         if(print_mcode_ == true)
                             {
-                                std::cout << "opcode_: " << (int)opcode_ << " bits: ";
-                                printbits(opcode_, 8);
-
-                                std::cout << ", rs_: $" << (int)rs_ << " bits: ";
-                                printbits(rs_, 8);
                                 
-                                std::cout << ", rt_: $" << (int)rt_ << " bits: ";
-                                printbits(rt_, 8);
+                                std::cout << "opcode_: " << (int)opcode_ << " bits: ";
+                                print_bits(opcode_, 6);
 
-                                std::cout << ", immediate" << (int)immediate_ << " bits: ";
-                                printbits(immediate_, 16);
+                                std::cout << "\nrs_: $" << (int)rs_ << " bits: ";
+                                print_bits(rs_, 5);
+                                
+                                std::cout << "\nrt_: $" << (int)rt_ << " bits: ";
+                                print_bits(rt_, 5);
+
+                                std::cout << "\nimmediate" << (int)immediate_ << " bits: ";
+                                print_bits(immediate_, 16);
 
                                 std::cout << std::endl;
                             }
@@ -335,16 +336,16 @@ uint32_t Machine::get_machine_code(std::vector<std::string> & tokens, Memory & m
                         if(print_mcode_ == true)
                         {
                             std::cout << "opcode_: " << (int)opcode_ << " bits: ";
-                            printbits(opcode_, 8);
+                            print_bits(opcode_, 6);
 
                             std::cout << ", rs_: $" << (int)rs_ << " bits: ";
-                            printbits(rs_, 8);
+                            print_bits(rs_, 5);
                             
                             std::cout << ", rt_: $" << (int)rt_ << " bits: ";
-                            printbits(rt_, 8);
+                            print_bits(rt_, 5);
 
                             std::cout << ", immediate" << (int)immediate_ << " bits: ";
-                            printbits(immediate_, 16);
+                            print_bits(immediate_, 16);
 
                             std::cout << std::endl;
                         }
@@ -359,16 +360,19 @@ uint32_t Machine::get_machine_code(std::vector<std::string> & tokens, Memory & m
             }
         }
         if(print_mcode_ == true)
-            printbits(mcode, format_);
+            print_bits(mcode, format_);
     }
     else
     {
-        std::cout << "error " << tokens[0]<< " does not exist" << std::endl;
+        std::cout << "error {" << tokens[0]<< "} does not exist" << std::endl;
+        return 0;
+        mcode_ = 0;
     }
       
     // for (int i = 31; i >= 0; --i)
     // {
     //     std::cout << ((mcode >> i) & 1);
     // }
+    mcode_ = mcode;
     return mcode;
 }

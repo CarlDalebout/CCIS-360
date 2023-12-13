@@ -31,6 +31,8 @@ public:
 /*==========================================================================================
 Functions
 ==========================================================================================*/
+    void       print_bits(uint32_t, int);
+    
     uint8_t    reg_to_index(std::string);
     uint32_t   get_machine_code(std::vector<std::string> &, Memory & memory);
     
@@ -59,8 +61,14 @@ Sets and Gets
     uint8_t  & funct()          { return funct_; }
     uint8_t    funct()    const { return funct_; }
 
-    bool     & mcode()          { return print_mcode_;}
-    bool       mcode()    const { return print_mcode_;}   
+    int      & format()       {return format_;} 
+    int        format() const {return format_;} 
+
+    uint32_t & mcode()      { return mcode_; }
+    uint32_t   mcode() const { return mcode_; }
+
+    bool     & print_mcode()          { return print_mcode_;}
+    bool       print_mcode()    const { return print_mcode_;}   
 
 private:
     uint8_t  opcode_;
@@ -71,6 +79,7 @@ private:
     uint8_t  shamt_;
     uint8_t  funct_;
     int      format_;
+    uint32_t mcode_;
     bool     print_mcode_;
     typedef  std::map<std::string, off> Functions_Op;
     static   Functions_Op functions_op_;
