@@ -17,6 +17,8 @@ public:
 /*==========================================================================================
 Functions
 ==========================================================================================*/
+    uint32_t get_address(std::string);
+    
     void  push_data(std::vector<std::string> &);
     void push_label(std::string, uint32_t);
     void push_stack(std::vector<std::string> &);

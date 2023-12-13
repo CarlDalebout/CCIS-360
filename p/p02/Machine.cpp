@@ -5,6 +5,7 @@
 {
     {"sll",     off( 0,  0, 0)}, 
     {"li",      off( 1,  0, 3)}, // added for testing
+    {"la",      off( 0,  1, 3)},
     {"j",       off( 2,  0, 2)},
     {"srl",     off( 0,  2, 0)},
     {"jal",     off( 3,  0, 2)},
@@ -184,7 +185,7 @@ uint8_t  Machine::reg_to_index(std::string tok)
     return 0x00000;
 }
 
-uint32_t Machine::get_machine_code(std::vector<std::string> & tokens)
+uint32_t Machine::get_machine_code(std::vector<std::string> & tokens, Memory & memory)
 {
     if(tokens[0] == "move")
             tokens.push_back("$0");
@@ -323,6 +324,37 @@ uint32_t Machine::get_machine_code(std::vector<std::string> & tokens)
                     }break;
                     default:
                     {}break;
+                }
+                switch (funct_)
+                {
+                    case 1:
+                    {
+                        rt_ = reg_to_index(tokens[1]);
+                        rs_ = reg_to_index("zero");
+                        immediate_ = memory.get_address(tokens[2]);
+                        if(print_mcode_ == true)
+                        {
+                            std::cout << "opcode_: " << (int)opcode_ << " bits: ";
+                            printbits(opcode_, 8);
+
+                            std::cout << ", rs_: $" << (int)rs_ << " bits: ";
+                            printbits(rs_, 8);
+                            
+                            std::cout << ", rt_: $" << (int)rt_ << " bits: ";
+                            printbits(rt_, 8);
+
+                            std::cout << ", immediate" << (int)immediate_ << " bits: ";
+                            printbits(immediate_, 16);
+
+                            std::cout << std::endl;
+                        }
+                        mcode = opcode_ << 26
+                        | rs_ << 21
+                        | rt_ << 16
+                        | immediate_;
+                    }break;
+                    default:
+                        break;
                 }
             }
         }

@@ -256,6 +256,18 @@ std::string string_to_hex(std::string value)
     return ret;
 }
 
+uint32_t Memory::get_address(std::string key)
+{
+    std::map<std::string, unsigned int>::iterator it_lable;
+    it_lable = lables_.find(key);
+    if(it_lable != lables_.end())
+        return it_lable->second;
+
+    std::cout << "!!! Error Address does not exits !!!\n";
+    return 0; 
+}
+
+
 void Memory::push_label(std::string key, uint32_t address)
 {
     key.pop_back();

@@ -229,7 +229,7 @@ uint32_t & Register::operator[](int index)
     return registers_[index];
 }
 
-void Register::update(Machine & machine)
+void Register::update(Machine & machine, Memory & memory)
 {
     switch (machine.opcode())
     {
@@ -241,6 +241,10 @@ void Register::update(Machine & machine)
                 {
                     //sll
                     registers_[machine.rd()] = registers_[machine.rt()] << machine.shamt();
+                }break;
+                case  1:
+                {
+                    registers_[machine.rt()] = machine.immedite();
                 }break;
                 case  2:
                 {

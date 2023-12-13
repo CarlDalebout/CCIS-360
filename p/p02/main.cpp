@@ -128,11 +128,11 @@ bool check_at_functions(std::vector<std::string> tokens)
         {
             if(tokens[1] == "reg")
             {
-                if(tokens.size() > 3)
+                if(tokens.size() > 2)
                 {
-                    if (tokens[3] == "const" && tokens[4] == "true")
+                    if (tokens[2] == "const" && tokens[3] == "true")
                         reg_print = true;
-                    else if(tokens[3] == "const" && tokens[4] == "false")
+                    else if(tokens[2] == "const" && tokens[3] == "false")
                         reg_print = false;
                     else
                     {
@@ -270,8 +270,8 @@ int main()
                     continue;
                 }
                 
-                machine.get_machine_code(tok.tokens());
-                reg.update(machine);
+                machine.get_machine_code(tok.tokens(), memory);
+                reg.update(machine, memory);
                 
                 if(reg_print)
                 {

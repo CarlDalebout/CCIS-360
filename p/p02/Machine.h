@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include "Token.h"
+#include "Memory.h"
 
 struct off
 {
@@ -31,7 +32,7 @@ public:
 Functions
 ==========================================================================================*/
     uint8_t    reg_to_index(std::string);
-    uint32_t   get_machine_code(std::vector<std::string> &);
+    uint32_t   get_machine_code(std::vector<std::string> &, Memory & memory);
     
 
 /*==========================================================================================
