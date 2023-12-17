@@ -1,6 +1,15 @@
 #include <iostream>
 #include <vector>
 
+void print_bits(uint32_t s)
+{
+    for(int i = 31; i >= 0; --i)
+    {
+        std::cout << (((s) >> i) & 1);
+    }
+    std::cout << std::endl;
+}
+
 std::vector<int> bits(uint32_t x, int base = 2)
 {
     std::vector<int> ret(32, 0);
@@ -23,21 +32,51 @@ std::vector<int> better_bits(uint32_t x)
     return ret;
 }
 
+uint32_t myaddu(uint32_t x, uint32_t y)
+{
+    uint32_t temp_x = x;
+    uint32_t temp_y = y;
+    uint32_t ret = 1;
+    uint8_t  c = 0;
+    uint32_t i = 31;
+    while(temp_x != 0)
+    {
+        uint8_t x_bit = (((temp_x) >> i) & 1);
+        uint8_t y_bit = (((temp_y) >> i) & 1);
+        
+        uint8_t s = (x_bit xor y_bit) xor c;
+                c = (((x_bit xor y_bit) and c) or (x_bit and y_bit));
+        
+        // 0000 0010
+        // 0000 0001
+        //----------
+        // 0000 0011
+        // ret << 1
+        // 0000 0110
+        ret = (ret << 1);
+        ret |= s;
 
-//  i           c
-// [0000000000][0000]
-// union X
-// {
-//     ;
-//     char c;
-// };
+        std::cout << "x_bit: " << (x_bit & 1) << std::endl;;
+        std::cout << "y_bit: " << (y_bit & 1) << std::endl;;
+        std::cout << "c: " << (c & 1) << std::endl;
+        std::cout << "temp_x: "; print_bits(temp_x);
+        std::cout << "temp_y: "; print_bits(temp_y);
+        std::cout << "s: " << (s & 1) << std::endl;
+        std::cout << "ret: "; print_bits(ret);
+        std::cout << std::endl;
+       
+        temp_x = temp_x >> 1;
+        temp_y = temp_y >> 1;
+
+    }
+    return ret;
+}
 
 union intfloat
 {
     float f;
     unsigned int i;
 };
-
 
 void turn_on(uint32_t * r, int index)
 {
@@ -71,6 +110,7 @@ struct Two
 
 int main()
 {
+    {
     // std::cout << sizeof(int) << '\n';
     // uint32_t x = 42;
     // std::cout << x << '\n';
@@ -142,21 +182,18 @@ int main()
     // x.f = 3.14;
     // std::cout << x.i << '\n';
     // // std::cout << ((f >> 1) & 1) << '\n';
-
-    float f = 3.14;
-    unsigned int * p = (unsigned int *)(&f); // RHS type = float *    
-    for(int i = 31; i >= 0; --i)
-    {
-        std::cout << (((*p) >> i) & 1) << " ";
     }
-    std::cout << '\n';
 
-    double d = 3.14;
-    p = (unsigned int *)(&d);
-    for(int i = 63; i >= 0; --i)
-    {
-        std::cout << (((*p) >> i) & 1) << " ";
-    }
+    uint32_t x = 15;
+    uint32_t y = 2;
+    std::cout << "x: "; print_bits(x);
+    std::cout << "y: "; print_bits(y);
+    std::cout << std::endl;
+    uint32_t z = myaddu(x, y);
+    print_bits(z);
+
     std::cout << std::endl;
     return 0;
 }
+
+

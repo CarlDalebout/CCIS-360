@@ -1,0 +1,722 @@
+\input{thispreamble.tex}
+
+\renewcommand\AUTHOR{jdoe5@cougars.ccis.edu} % CHANGE TO YOURS
+
+\begin{document}
+\topmattertwo
+
+FALL2023 NEW INSTRUCTIONS:
+The first bullet point below is changed to the following --
+This is open-book and takehome and no discussion with
+anyone (but yourself).
+You can only use my notes.
+Sure you can use a calculator, but you have to justify all calculations
+anyway.
+
+\input{preamble-instructions.tex}
+
+
+\begin{center}
+  \textsc{Honor Statement}
+\end{center}
+I, \answerbox{[REPLACE WITH YOUR FULLNAME]},
+attest to the fact that the submitted work is my own and
+is not the result of plagiarism.
+Furthermore, I have not aided another student in the act of
+plagiarism.
+
+% ------------------------------------------------------------------------------
+
+\newpage
+\texttt{IMPORTANT INSTRUCTION FROM EARTH:
+\\
+SHOW AND EXPLAIN ***ALL*** YOUR WORK.
+\\
+YOU ARE NOT ALLOWED TO SHARE THIS DOCUMENT AFTER THE EXAM.
+\\
+END OF TRANSMISSION FROM HOUSON.
+}
+
+% ------------------------------------------------------------------------------
+\begin{python}
+from scoretable import *
+\end{python}
+
+% ------------------------------------------------------------------------------
+\newpage
+\input{preamble.tex}
+
+% ------------------------------------------------------------------------------
+\newpage
+\nextq
+The saga of an interplanetary software consultant continues ...
+
+The fee of your consulting work for planet Tutu is \$51.765.
+But they only accept your bill in base 2.
+Convert 51.765 to base 2 up to 3 binary place (but with possible rounding
+from the 4th binary place.) Show all work.
+
+\textsc{Answer:}
+In the following use \verb!_! for subscript and \verb!^! for power.
+
+\begin{answercode}
+First we consider 51.
+
+    2 | 51
+      +-------
+    2 | 25 r 1
+      +-------
+    2 | 12 r 1
+      +-------
+    2 |  6 r 0
+      +-------
+    2 |  3 r 0
+      +-------  
+    2 |  1 r 1
+      +-------
+    2 |  0 r 1
+      +-------
+      
+Therefore 51_{10} = 110011_2
+
+Now we consider 0.765_{10}.
+
+      2 x 0.765 = 1.53 r 1
+      2 x 0.53  = 1.06 r 1
+      2 x 0.06  = 0.12 r 0
+      2 x 0.12  = 0.24 r 0
+
+Therefore 0.765_{10} is approxmately 0.1100_{2} up to 4 binary place.
+Therefore up to 3 binary places (with rounding), 0.765_{10} = 0.110_{2}.
+
+Therefore 51.765_{10} = 110011.110_{2}.
+\end{answercode}
+
+% ------------------------------------------------------------------------------
+\newpage
+\nextq
+Something seems to wrong with the mainframe computer on planet Rouf.
+Their machine is basically in base 4.
+After tracing some output, you suspect something is wrong with the base 4
+multiplication in the chip.
+You decide to double check at least one case by hand ...
+\begin{enumerate}
+\item[(a)] Compute the following product in base 4:
+\[
+120021_4 \times  103011_4
+\]
+\item[(b)] Convert the result of (a) to base 10.
+\item[(c)] Convert $120021_4$ to base 2 quickly.
+\item[(d)] Convert $103011_4$ to base 2 quickly.
+\end{enumerate}
+
+\textsc{Answer:}
+In the following use \verb!_! for subscript and \verb!^! for power.
+
+
+\begin{answercode}
+(a)
+                    120021
+                  x 103011
+           ---------------
+                  111
+                   +120021
+                  +1200210
+                       +00
+               +1020123000
+                     +0000
+              +12002100000
+           ---------------
+               13030203231
+           ---------------
+
+(b) 13030203231_4 = 0001 1100 1100 1000 1110 1101 (complete this expression using ^ for power)
+            = 1x10^6 + 8x10^5 + 8x10^4 + 6x10^3 + 4x10^2 + 4x10^1 + 5x10^0
+            = 1886445
+
+(c) 120021_4 = (1|2|0|0|2|1)_4
+             = (01|10|00|00|10|01)_2
+             = 0110 0000 1001_2
+
+(d) 103011_4 = 0100 1100 0101_2
+
+\end{answercode}
+
+% ------------------------------------------------------------------------------
+\newpage
+\nextq
+While traveling back to Earth, you were abducted by the Glinkons:
+unfortunately your teleporter broke down and in an attempt to get home
+in time for the beginning of the football season,
+you thought it was safe to take a shortcut through their spacial territory ...
+
+When their commander accused of spying on their planet,
+you blurted out that you're just a software engineer ... a geek ...
+
+\lq\lq Oh a CS geek, eh? Really?!?
+In that case you won't have trouble solving this problem ..."
+
+\lq\lq The number in 1011001 in base 2 has three 0s  and a total length of 7.
+So the ratio of 0s is 3/7.
+Right? Of course left trailing zeroes do not count."
+
+(You're sweating now ...
+it's one of those pesky number base problems again ... )
+
+\lq\lq But this same number 1011001 in base 2 when converted to 10 is 89 which
+has no zeros. So the ratio of 0s is 0/2."
+ 
+\lq\lq So I'm giving you the number 49618850 in base 10.
+Find the base B such that when this number is converted to this base B, the
+representation has the largest ratio of zeros. B is at most 16."
+
+\lq\lq You have 1 hour. SHOW ALL YOUR WORK!!!"
+
+\textsc{Answer:}
+\begin{answercode}
+base B    |     representation in base B     | length  | number of zeroes | ratio
+------    +----------------------------------+---------+------------------+------
+     2    |0010 1111 0101 0001 1111 1010 0010|       26|                10|26/10
+     3    |          0001 0110 1002 2002 1012|       17|                 7| 7/17
+     4    |              02 33 11 01 33 22 02|       13|                 2| 2/13
+    10    |                          49618850|        8|                 1| 1/8
+    16    |                         02F5 1FA2|        7|                 0| 0/7
+
+Therefore the base with the largest ratio of zeroes is B = 2.
+
+\end{answercode}
+
+% ------------------------------------------------------------------------------
+\newpage
+\nextq
+(a) Many of the computers at planet Ducloz Dusun are all fried because
+of solar flares ... and you're on that planet right now to help them.
+Fortunately many computers shutdown in time.
+To bring up all the functioning hardware, you need to key in the sys admin
+password, which is the binary sequence of the two's complement representation
+of $-96$ on their mainframe.
+(They can't do it because they have forgotten their binary math.)
+Note that their word size is $35$ bits, i.e. registers are made up of $35$ bits.
+
+(b) The people Ducloz Dusun felt dumb,
+not able to restart their machines because they forgot their binary math for
+$5000$ years.
+They wanted to learn their math all over again and your boss happily obliged
+because he's going to charge them 5x the usual overtime pay.
+Unfortunately you have to teach them the computer math.
+In particular, you have to show them how to perform
+\[
+42 - 13
+\]
+on their 35 bit machine but using only addition.
+
+\textsc{Answer:}
+\begin{answercode}
+Write down 42 and -13 in base 2 for 35-bit wide registers.
+Perform 35-bit wide addition. Convert that back to base 10.
+
+    42 =  000 0000 0000 0000 0000 0000 0000 0010 1010_2
+
+    13 =  000 0000 0000 0000 0000 0000 0000 0000 1101_2
+
+Flipping the bits of 13, we get:
+
+    111 1111 1111 1111 1111 1111 1111 1111 0010_2
+
+Adding a 1, we get -13:
+
+    111 1111 1111 1111 1111 1111 1111 1111 0011_2
+
+Therefore 42 - 13 = 42 + (-32) is
+
+       000 0000 0000 0000 0000 0000 0000 0010 1010_2
+	+  111 1111 1111 1111 1111 1111 1111 1111 0011_2
+	-------------------------------------------------
+	   000 0000 0000 0000 0000 0000 0000 0001 1101_2
+	-------------------------------------------------
+
+\end{answercode}
+
+% ------------------------------------------------------------------------------
+\newpage
+\nextq
+Great ... your boss bought a nanophone, a really tiny mobile phone.
+MIPS is already a RISC machine, but your manager's nanophone is a reduced MIPS.
+(RRISC?)
+It particular, it does not have arithmetic instructions like add, addi, addiu,
+sub, etc. (This is definitely not a smartphone ...)
+
+Your manager asked you to write a function to perform unsigned addition of two
+registers.
+You checked the technical documentation for this reduced MIPS chip and see that
+although it does not have arithmetic instructions, it does have all other
+instructions and pseudoinstructions.
+It also contains logical operations (i.e. bit operations). For instance:
+\begin{Verbatim}[frame=single,fontsize=\small]
+                      # Description              Description using C/C++
+sll   $s0, $s1, 2     # shift left by constant   s0 = s1 << 2	
+srl   $s0, $s1, 3     # shift right by constant  s0 = s1 >> 3
+sllv  $s0, $s1, $t0   # shift left by variable   s0 = s1 << t0
+srlv  $s0, $s1, $t1   # shift right by variable  s0 = s1 >> t1
+                                                 
+and   $s0, $s1, $s2   # and                      s0 = s1 & s2
+andi  $s0, $s1, 4     # and immediate            s0 = s1 & 5
+                                                 
+or    $s0, $s1, $s2   # or                       s0 = s1 | s2
+ori   $s0, $s1, 5     # or immediate             s0 = s1 | 5
+                                                 
+nor   $s0, $s1, $s2   # not-or (nor)             s0 = ~(s1 | s2)
+\end{Verbatim}
+(See chapter \#25 of my notes.)
+You should call your function \verb!myaddu!.
+Of course it performs unsigned add on \verb!$a0!, \verb!$a1! and puts the
+resulting bits in \verb!$v0!.
+You should add test code as given below.
+
+Your manager is waiting for your work and will be testing it on PCSpim before
+using the code in his nanophone.
+He's also going to get Joe Cantcode to visually verify that your function does
+NOT contain any arithmetic instructions (i.e., no addition, no subtraction,
+no multiplication, no division, whether signed or unsigned.)
+
+\textsc{Answer:}
+Copy and paste your code below. I must be able to run it.
+\begin{answercode}
+        .text
+        .globl main
+
+
+
+myaddu: 
+        # Perform unsigned add on $a0, $a1 and store result in $v03
+        # get the last bit for a0 and a1 and conduct a half adder on them storing the carry
+        li  $t1, 0  # s
+        li  $t2, 0  # c
+        li  $v0, 0  # ret
+        li  $t0, 31 # iterator
+        myaddu_loop:
+            srlv    $t1, $a0, $t0
+            andi    $t3, $t1, 1 # t3 = x_bit
+            srlv    $t1, $a1, $t0
+            andi    $t4, $t1, 1 # t4 = y_bit
+
+            xor     $t5, $t3, $t4
+            xor     $t1, $t5, $t2 # t1 = s
+            
+            and     $t5, $t5, $t2
+            and     $t2, $t3, $t4
+            or      $t2, $t5, $t2 # t2 = c
+
+            sllv    $t5, $t1, $t0
+            or      $v0, $v0, $t5
+
+            s1l     $a0 $a0, 1
+            s1l     $a1 $a1, 1
+        beq $a0, $0, myaddu_loop_exit:
+            j myaddu
+        myaddu_loop_exit:
+        jr $ra
+
+
+main:                           # perform syscall to read int x and y and
+                                # store them in $a0, $a1
+        li      $v0 5
+        syscall
+        move    $a0, $v0
+        
+        li      $v0 5
+        syscall
+        move    $a1, $v0
+
+        jal     myaddu          # compute the unsigned sum of $a0, $a1
+                                # and store result in $v0
+        move    $a0, $v0        # perform syscall to print int the return
+        li      $v0, 1          # value in $v0 which is set by myaddu
+        syscall
+
+        li      $v0, 10
+        syscall
+\end{answercode}
+
+%------------------------------------------------------------------------------
+\newpage
+\nextq
+Great. Just great. Someone at Fullabugz accidentally deleted the source code
+for one of their most important program ... the payroll program!!!
+Everyone is given some MIPS machine code to disassemble, i.e.,
+to translate into MIPS assembly code.
+Here's yours machine code in hexadecimal:
+\[
+\texttt{0x01099022}
+\]
+Your boss told you that the above machine code is an R-format instruction.
+You quickly google for MIPS machine instruction format and quickly look for
+R-format instructions ...
+
+(a) First the manual tells you to translate the above instruction
+\verb!0x01099022! in hexadecimal into 32 bits.
+
+(b) The manual tells you that the 32 bits from (a) is broken up into fields.
+Going left to right, the first 6 bits is called \verb!op!,
+the next 5 bits is called \lq\lq rs", and next 5 bits is called
+\lq\lq rt", the next 5 bits is called \lq\lq rd",
+the next 5 bits is called \lq\lq shamt", and the remaining rightmost 6 bits is
+called \lq\lq funct". Write down the fields in base 2.
+
+(c) In base 10, write down the op, shamt, and funct for the machine
+instruction \verb!0x01099022!.
+
+(d) The manual tells that rs, rt, rd are translated to registers by translating
+the base 2 numbers rs, rt, rd to base 10.
+For instance if the binary value of rt is 8, then it refers to register
+\verb!$8!, i.e., it refers to the register name \verb!$t0!.
+Write down the registers rs, rt, rd in base 10 and then their names.
+
+(e) Finally, the manual tells us that for an R-format machine instruction is translated to the following assembly instruction:
+\begin{Verbatim}
+    [operation]    [rd], [rs], [rt]
+\end{Verbatim}
+\textsc{Answer:}
+\begin{answercode}
+(a) The machine code in 32 bits (for readability, group bits in chunks of 4
+bits):
+
+	0x01099022 = 0000 0001 0000 1001 1001 0000 0010 0010
+
+(b) We break up the bits from (a) into chunks of 6 bits, 5 bits, 5 bits,
+5 bits, 5 bits, 6 bits to get the op, rs, rt, rd, shamt, funct fields:
+
+    000000 01000 01001 10010 00000 100010
+
+The fields of the machine code 0x01099022 is
+
+                 in base 2    in base 10
+        op       00000	      0			
+        rs       01000        8			
+        rt       01001        9			
+        rd       10010        18			
+        shamt    00000        0			
+        funct    100010       34			
+
+(c) The operation is sub.
+
+(d) For our machine instruction the register names of the rs, rt, rd are:
+
+                register name
+        rs      t0
+        rt      t1
+        rd      s2
+
+(e) Finally the assembly instruction for the machine code 0x01099022 is
+
+        sub $s2, $t0, $t1
+\end{answercode}
+
+% ------------------------------------------------------------------------------
+\newpage
+\nextq
+The CEO has decreed that your pay is going to be \verb!f(10)! where
+\verb!f! is the function:
+\begin{Verbatim}[frame=single,fontsize=\small]
+int f(int n)
+{
+    if (n == 0) return 5;
+    else if (n == 1) return 7;
+    else if (n == 2) return 3;
+    else return 2 * f(n - 1) + 3 * f(n - 2) + 4 * f(n - 3);
+}
+\end{Verbatim}
+but only if you can implement the above in MIPS.
+What kind of a crazy company is this?!?
+
+\textsc{Answer:}
+Copy and paste your code below. I must be able to run it as a complete program.
+\begin{answercode}
+        .text
+        .globl main
+
+f:      # TODO
+    beq     $a0, $0, f_return5
+    
+    li      $t0, 1    
+    beq     $a0, $t0, f_return7
+    
+    li      $t0, 2
+    beq     $a0, $t0, f_return3
+    
+    addiu   $sp, $sp, -8
+        sw      $a0, 0($sp)
+        sw      $ra, 4($sp)
+        
+            addi    $a0, $a0, -1
+            jal     f
+            move    $t0, $v0
+            
+            lw      $a0, 0($sp)
+            addi    $a0, $a0, -2
+            jal     f
+            move    $t1, $v0
+
+            lw      $a0, 0($sp)
+            addi    $a0, $a0, -3
+            jal     f
+            move    $t2, $v0
+
+            li      $t3, 2
+            mult    $t0, $t3
+            mflo    $v0
+
+            li      $t3, 3
+            mult    $t1, $t3
+            mflo    $t0
+            add     $v0, $v0, $t0
+
+            li      $t3, 4
+            mult    $t2, $t3
+            mflo    $t0
+            add     $v0, $v0, $t0
+            
+        lw      $ra, 4($sp)
+        lw      $a0, 0($sp)
+    addiu   $sp, $sp,  8
+    jr      $ra
+
+    f_return5:
+        li      $v0, 5
+        jr      $ra
+    f_return7:
+        li      $v0, 7
+        jr      $ra
+    f_return3:
+        li      $v0, 3
+        jr      $ra
+    
+
+main:                       # perform syscall to read int n and
+                            # store them in $a0
+    li      $v0, 5
+    syscall
+    move    $a0, $v0
+    
+    jal     f               # compute f(a0) and store result in $v0
+    move    $a0, $v0
+    
+    li      $v0, 1          # perform syscall to print int the return
+    syscall                 # value in $v0 which is set by f
+
+    li      $v0, 10
+    syscall
+\end{answercode}
+Note:
+Of course you are advised to test your code.
+As always, if your program crashes or runs an infinite loop during a test run,
+you get 0 for that test case.
+
+%------------------------------------------------------------------------------
+\newpage
+\nextq
+Your work on Planet Taolf, their civilization now has advanced to the point
+where they now need more than just integers!
+Time for floating point numbers!
+This curious civilization manage to move to computers with only the concept
+of integers.
+You have decided not to contact IEEE to design a new floating point type --
+you are going to design it yourself (because you don’t want to outsource and
+you want to keep all the consulting fees).
+Well, not exactly, you are going to copy their design.
+There’s just one problem:
+their computers uses 30 bits registers and not 32.
+You have decided to follow the IEEE 754 Single Precision representation as
+much as possible.
+The 30-bit computers on Toalf will be laid out with 3 fields just like IEEE 754
+Single Precision format:
+\begin{enumerate}[nosep]
+\li 1 bit for the sign bit s.
+\li 8 bits for encoding the exponent E. The bias is the same, i.e., 127.
+\li 21 bits for the fractional part F of the mantissa.
+\end{enumerate}
+You are calling this the TAOLF30 standard.
+
+\begin{enumerate}
+\item[(a)] You are going to test your Toalf computer with TOALF30 floating
+point.
+Here’s your test case: What is the 30-bit number
+\verb!011011010010101011111000001001! written in TAOLF30 in our usual
+normalized base 10 scientific notation?
+\item[(b)] Now you need to bill Toalf.
+It’s going to be \$57,130,500.55.
+But you are now on Earth.
+So you need to convert 57130500.55 into 30 bits and send the bits to
+Toalf by intergalactic-network. What is the 30-bit representation of
+57130500.55 using the TAOLF30 representation?
+\end{enumerate}
+
+\textsc{Answer:}
+\begin{answercode}
+(a) The fields of 0 11011010 010101011111000001001 are
+
+    s = 0
+    E + Bias =  218
+    F = 0.704009
+
+Therefore
+
+    sign = + (put + or -)
+    E = 91
+    1 + F = 1010101011111000001001
+
+Converting to base 10
+
+    sign = + (put + or -)
+    E = 91
+    1 + F = 2.801161
+
+Hence in signed fractional binary form, 0 11011010 010101011111000001001 is
+
+    (+ or -) 1.010101011111000001001 x 2^91 =  
+    
+Converting the above to normalized base 10 scientific notation, we get
+
+1.335697650909423828125 x 2^91 = 3,307,027,204,880,404,564,110,475,264
+
+(b)
+\end{answercode}
+
+
+%------------------------------------------------------------------------------
+\newpage
+\nextq
+You are told to design the following for a game show on planet Nemow.
+The design will tell the game host who which of two teams will get to answer
+the question.
+
+There are two husband-and-wife teams.
+Let's call the input from the husband of the first team $w$ and the input
+his wife $x$.
+The input from the husband of the second is $y$ and the input from his wife
+is $z$.
+An output of 0 mean team 1 will answer and an output of 1 will mean team 2
+gets to answer.
+
+On planet Nemow, during election, each woman's vote count as 2 points and a
+man's vote count as 1.
+The game show host has decided to use the same rule for his show.
+After reading a question, members can press a button to indicate interest in
+answering the question.
+If the husband from team 1 presses his button, which for us will mean $w = 1$,
+and his wife also presses her button, i.e., $x = 1$, they get 3 points.
+Suppose for team 2, the husband does not press his button, i.e., y = 0,
+but his wife presses her button, i.e., $z = 1$.
+So team 2 gets 2 points.
+Your machine will decide based on which team has more \lq\lq button points".
+In this case, since team 1 has 3 points and team 2 has 2 points,
+team 1 gets to answer.
+Your machine will output $f = 0$.
+An output of $f = 1$ means team 2 gets to answer.
+For instance suppose for team 1, the husband presses the button and his wife
+does not (team 1 has 1 button point), and for team 2, the husband does not
+press his button but his wife does (team 2 has 2 button points).
+Therefore in this case team 2 gets to answer; your device will output $f = 1$.
+
+In the case of a tie breaker, team 1 gets to answer.
+That sounds like a good deal.
+However, if no one wants to answer, team 1 has to answer!
+
+Fortunately you only need to provide a logic design.
+Make sure you work out each part carefully and correctly.
+I will stop reading your work once you hit a mistake.
+
+\begin{enumerate}[nosep]
+\item[(a)] Write down the truth table for $f$.
+\item[(b)] Write down the K-map for $f$.
+\item[(c)] Derive a minimal boolean expression for $f$ (in SOP form).
+\item[(d)] Draw the logic network diagram for $f$. (See below for example.)
+\item[(e)] Write down the cost of the logic network.
+(This can be calculated this way: Ignoring the NOT gates,
+count the number of inputs to all the AND and the OR gates.)
+\end{enumerate}
+
+\textsc{Answer:}
+\begin{answercode}
+
+(a)      +---------+---+
+         | w x y z | f | 
+         +---------+---+
+         | 0 0 0 0 | 0 |
+         | 0 0 0 1 | 1 |
+         | 0 0 1 0 | 1 |
+         | 0 0 1 1 | 1 |
+         | 0 1 0 0 | 0 |
+         | 0 1 0 1 | 0 |
+         | 0 1 1 0 | 0 |
+         | 0 1 1 1 | 1 |
+         | 1 0 0 0 | 0 |
+         | 1 0 0 1 | 1 |
+         | 1 0 1 0 | 0 |
+         | 1 0 1 1 | 1 |
+         | 1 1 0 0 | 0 |
+         | 1 1 0 1 | 0 |
+         | 1 1 1 0 | 0 |
+         | 1 1 1 1 | 0 |
+         +---------+---+
+         
+(b)   yz   00  01  11  10
+   wx    +----------------+
+      00 |  0   1   1   1 |
+      01 |  0   0   1   0 |
+      11 |  0   0   0   0 |
+      10 |  0   1   1   0 |
+         +----------------+
+
+(c) f = wx'z + w'x'z + w'yz + w'x'y
+
+(d) 
+                             +---+ wx'z
+    w---+--------------------|AND|------------+                 
+        |       +------------|   |            |           
+        |       |  +---------|   |            |     
+        |       |  |         +---+            |     
+        |       |  |           +---+ w'x'z    |     
+        +--NOT--|--|--+--------|AND|-------+  |           
+                |  |  |  +-----|   |       |  |           
+    x---+-------+  |  |  |  +--|   |       |  |           
+        |          |  |  |  |  +---+       |  |  +---+ wx'z + w'x'z + w'yz + w'x'y
+        +--NOT-----|--|--+  |              |  +--|OR |---------------------------------
+                   |  |  |  |              +-----|   |     
+                   |  |  |  |              +-----|   |     
+                   |  |  |  |              |  +--|   |     
+                   |  |  |  |  +---+ w'yz  |  |  +---+           
+                   |  +--|--|--|AND|-------+  |             
+    y-------+------|--|--|--|--|   |          |         
+            |      +--|--|--+--|   |          |         
+            |      |  |  |     +---+          |             
+    z-------|------+  |  |                    |         
+            |         |  |  +---+ w'x'y       |         
+            +---------|--|--|AND|-------------+       
+                      +--|--|   |                           
+                         +--|   |                           
+                            +---+                       
+
+
+
+
+(e) Cost = 4 + 4 + 4 + 4 + 5 = 21
+\end{answercode}
+Here's an example of how to draw logic networks using ASCII art:
+\begin{Verbatim}[frame=single]
+                          +---+ ab
+      a ---+--------------|AND|-----+
+           |          +---|   |     |   +---+ ab + a'b
+           +--NOT--+  |   +---+     +---|OR |----------
+                   |  |             +---|   |
+                   |  |   +---+     |   +---+
+                   +--|---|AND|-----+
+      b --------------+---|   | a'b
+                          +---+
+\end{Verbatim}
+The above logic network has a cost of 2 + 2 + 2 = 6.
+
+%------------------------------------------------------------------------------
+\newpage
+\input{instructions}
+\end{document}
